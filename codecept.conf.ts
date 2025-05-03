@@ -14,7 +14,6 @@ export const config: CodeceptJS.MainConfig = {
       keepTraceForPassedTests: false,
       fullPageScreenshots: true,
       waitForNavigation: 'domcontentloaded',
-      
       url: 'https://automationexercise.com',
       show: process.env.HEADLESS !== 'true'
     }
