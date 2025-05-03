@@ -30,6 +30,25 @@ jobs:
       - name: Run CodeceptJS tests
         run: HEADLESS=true npx codeceptjs run --plugins allure --steps
 
+      - name: Upload Playwright traces
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: output/  
+      
+      - name: Add Playwright traces link to summary
+        if: failure()
+        run: |
+          echo "### ⚠️ Playwright Traces" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Трейсы прикреплены как artifact [playwright-traces] ниже ⬇️" >> $GITHUB_STEP_SUMMARY
+          echo "Чтобы просмотреть трейс:" >> $GITHUB_STEP_SUMMARY
+          echo "1. Скачать артефакт ниже" >> $GITHUB_STEP_SUMMARY
+          echo "2. Распаковать .zip" >> $GITHUB_STEP_SUMMARY
+          echo "3. Открыть файл с расширением *.zip внутри (это trace) в браузере:" >> $GITHUB_STEP_SUMMARY
+          echo "   https://trace.playwright.dev" >> $GITHUB_STEP_SUMMARY
+
       - name: Generate Allure Report
         if: always()
         run: npx allure generate allure-results --clean -o allure-report

@@ -10,6 +10,10 @@ export const config: CodeceptJS.MainConfig = {
   helpers: {
     Playwright: {
       browser: 'chromium',
+      trace: true,
+      keepTraceForPassedTests: false,
+      fullPageScreenshots: true,
+      waitForNavigation: 'domcontentloaded',
       url: 'https://automationexercise.com',
       show: process.env.HEADLESS !== 'true'
     }
