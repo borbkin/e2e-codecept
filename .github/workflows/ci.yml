@@ -38,3 +38,9 @@ jobs:
         with:
           name: allure-report
           path: output/allure-report
+
+      - name: Add link to Allure report in summary
+        run: |
+          echo "### ✅ Allure Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "[Открыть Allure отчёт](https://borbkin.github.io/e2e-codecept/)" >> $GITHUB_STEP_SUMMARY
