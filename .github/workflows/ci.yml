@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ master ]
   schedule:
-    - cron: '0 9 * * *' # каждый день в 06:00 UTC (12:00 по МСК)
+    - cron: '0 9 * * *' # каждый день в 09:00 UTC (12:00 по МСК)
 
 jobs:
   test:
@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -33,11 +33,11 @@ jobs:
       - name: Generate Allure Report
         run: npx allure generate output --clean -o output/allure-report
 
-      - name: Upload Allure Report as Artifact
-        uses: actions/upload-artifact@v4
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          name: allure-report
-          path: output/allure-report
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: output/allure-report
 
       - name: Add link to Allure report in summary
         run: |
