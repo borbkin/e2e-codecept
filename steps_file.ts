@@ -5,13 +5,15 @@ export = function() {
   return actor({
     async acceptCookiesIfVisible(this: CodeceptJS.I) {
       this.say('Пробуем закрыть баннер с cookies...');
-      try {
-        this.say('Ждём 5 сек перед проверкой');
-        await this.wait(5);
-        await this.waitForElement(LoginPage.cookiesConsentButton, 5);
+    
+      // подождём чуть больше, но не обязательно
+      await this.wait(2);
+    
+      const count = await this.grabNumberOfVisibleElements(LoginPage.cookiesConsentButton);
+      if (count > 0) {
+        this.say('Баннер найден, закрываем');
         await this.click(LoginPage.cookiesConsentButton);
-        this.say('Баннер закрыт');
-      } catch (e) {
+      } else {
         this.say('Баннер не появился — пропускаем');
       }
     },
