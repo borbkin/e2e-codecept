@@ -3,12 +3,14 @@
 export = function() {
   return actor({
     async acceptCookiesIfVisible(this: CodeceptJS.I) {
-      this.say('Ждём появления баннера cookies...');
-      try {
-        await this.waitForElement('.fc-cta-consent', 5); // подождём максимум 5 секунд
+      this.say('Пробуем закрыть баннер с cookies...');
+      await this.wait(5); // дать странице прогрузиться
+    
+      const count = await this.grabNumberOfVisibleElements('.fc-cta-consent');
+      if (count > 0) {
         this.say('Баннер найден, кликаем');
         await this.click('.fc-cta-consent');
-      } catch (e) {
+      } else {
         this.say('Баннер не появился — пропускаем');
       }
     },
@@ -40,6 +42,27 @@ export = function() {
       await this.click('[data-qa="continue-button"]');
     
       await this.see(`Logged in as ${name}`);
+
+      //Выход из учётки — подготовка для login-теста
+      await this.logout();
+    },
+    async login(this: CodeceptJS.I, email: string, password: string) {
+      await this.amOnPage('/login');
+      await this.acceptCookiesIfVisible();
+    
+      await this.fillField('[data-qa="login-email"]', email);
+      await this.fillField('[data-qa="login-password"]', password);
+      await this.click('[data-qa="login-button"]');
+    
+      await this.waitForText('Logged in as', 10);
+    },
+    async logout(this: CodeceptJS.I) {
+      try {
+        await this.click('Logout');
+        await this.see('Login to your account');
+      } catch (e) {
+        this.say('Пользователь не был залогинен — пропускаем logout');
+      }
     }
   });
 };
