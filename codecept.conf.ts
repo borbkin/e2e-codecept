@@ -13,9 +13,12 @@ export const config: CodeceptJS.MainConfig = {
       trace: true,
       keepTraceForPassedTests: false,
       fullPageScreenshots: true,
+      uniqueScreenshotNames: true,
+      recordHar: true,
+      windowSize: '1200x900',
       waitForNavigation: 'domcontentloaded',
       url: 'https://automationexercise.com',
-      show: process.env.HEADLESS !== 'true'
+      show: process.env.HEADLESS !== 'true',
     }
   },
   include: {
