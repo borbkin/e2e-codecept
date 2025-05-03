@@ -17,5 +17,14 @@ export const config: CodeceptJS.MainConfig = {
   include: {
     I: './steps_file'
   },
-  name: 'e2e-codecept'
+  plugins: {
+    screenshotOnFail: {
+      enabled: true
+    },
+    retryFailedStep: {
+      enabled: true,
+      retries: 1
+    }
+  },
+  name: 'e2e-codecept',
 };
