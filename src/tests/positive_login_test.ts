@@ -15,6 +15,13 @@ Before(async ({ I }) => {
 });
 
 Scenario('Позитивный вход по email и паролю', async ({ I }) => {
-  await I.login(email, password);
+  await I.amOnPage(LoginPage.url);
+  await I.acceptCookiesIfVisible();
+
+  await I.fillField(LoginPage.emailField, email);
+  await I.fillField(LoginPage.passwordField, password);
+  await I.click(LoginPage.submitButton);
+
+  await I.waitForText('Logged in as', 10);
   await I.see(LoginPage.loggedInText(userName));
 });
