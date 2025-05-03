@@ -14,7 +14,9 @@ export const config: CodeceptJS.MainConfig = {
       keepTraceForPassedTests: false,
       fullPageScreenshots: true,
       uniqueScreenshotNames: true,
-      recordHar: true,
+      recordHar: { 
+        path: 'output/network.har' 
+      },
       windowSize: '1200x900',
       waitForNavigation: 'domcontentloaded',
       url: 'https://automationexercise.com',
