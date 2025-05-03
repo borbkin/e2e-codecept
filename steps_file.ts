@@ -1,65 +1,67 @@
-// in this file you can append custom step methods to 'I' object
+import { LoginPage } from './src/pages/LoginPage';
+import { RegistrationPage } from './src/pages/RegistrationPage';
 
 export = function() {
   return actor({
     async acceptCookiesIfVisible(this: CodeceptJS.I) {
       this.say('Пробуем закрыть баннер с cookies...');
-      await this.wait(5); // дать странице прогрузиться
-    
-      const count = await this.grabNumberOfVisibleElements('.fc-cta-consent');
-      if (count > 0) {
-        this.say('Баннер найден, кликаем');
-        await this.click('.fc-cta-consent');
-      } else {
+      try {
+        this.say('Ждём 5 сек перед проверкой');
+        await this.wait(5);
+        await this.waitForElement(LoginPage.cookiesConsentButton, 5);
+        await this.click(LoginPage.cookiesConsentButton);
+        this.say('Баннер закрыт');
+      } catch (e) {
         this.say('Баннер не появился — пропускаем');
       }
     },
-    async registerNewUser(this: CodeceptJS.I, name: string, email: string, password: string) {
-      await this.amOnPage('/login');
-      await this.acceptCookiesIfVisible();
-    
-      await this.fillField('[data-qa="signup-name"]', name);
-      await this.fillField('[data-qa="signup-email"]', email);
-      await this.click('[data-qa="signup-button"]');
-    
-      await this.waitForElement('#password', 5);
-      await this.fillField('#password', password);
-      await this.selectOption('#days', '3');
-      await this.selectOption('#months', 'April');
-      await this.selectOption('#years', '1994');
-    
-      await this.fillField('#first_name', 'Test');
-      await this.fillField('#last_name', 'User');
-      await this.fillField('#address1', '123 Test Street');
-      await this.selectOption('#country', 'Canada');
-      await this.fillField('#state', 'Ontario');
-      await this.fillField('#city', 'Toronto');
-      await this.fillField('#zipcode', 'M1M1M1');
-      await this.fillField('#mobile_number', '+1234567890');
-    
-      await this.click('[data-qa="create-account"]');
-      await this.waitForText('Account Created!', 10);
-      await this.click('[data-qa="continue-button"]');
-    
-      await this.see(`Logged in as ${name}`);
 
-      //Выход из учётки — подготовка для login-теста
+    async registerNewUser(this: CodeceptJS.I, name: string, email: string, password: string) {
+      await this.amOnPage(LoginPage.url);
+      await this.acceptCookiesIfVisible();
+
+      await this.fillField(RegistrationPage.nameField, name);
+      await this.fillField(RegistrationPage.emailField, email);
+      await this.click(RegistrationPage.signupButton);
+
+      await this.waitForElement(RegistrationPage.passwordField, 5);
+      await this.fillField(RegistrationPage.passwordField, password);
+      await this.selectOption(RegistrationPage.daySelect, '3');
+      await this.selectOption(RegistrationPage.monthSelect, 'April');
+      await this.selectOption(RegistrationPage.yearSelect, '1994');
+
+      await this.fillField(RegistrationPage.firstNameField, 'Test');
+      await this.fillField(RegistrationPage.lastNameField, 'User');
+      await this.fillField(RegistrationPage.addressField, '123 Test Street');
+      await this.selectOption(RegistrationPage.countrySelect, 'Canada');
+      await this.fillField(RegistrationPage.stateField, 'Ontario');
+      await this.fillField(RegistrationPage.cityField, 'Toronto');
+      await this.fillField(RegistrationPage.zipcodeField, 'M1M1M1');
+      await this.fillField(RegistrationPage.mobileField, '+1234567890');
+
+      await this.click(RegistrationPage.createAccountButton);
+      await this.waitForText(RegistrationPage.accountCreatedText, 10);
+      await this.click(RegistrationPage.continueButton);
+
+      await this.see(LoginPage.loggedInText(name));
       await this.logout();
     },
+
     async login(this: CodeceptJS.I, email: string, password: string) {
-      await this.amOnPage('/login');
+      await this.amOnPage(LoginPage.url);
       await this.acceptCookiesIfVisible();
-    
-      await this.fillField('[data-qa="login-email"]', email);
-      await this.fillField('[data-qa="login-password"]', password);
-      await this.click('[data-qa="login-button"]');
-    
+
+      await this.fillField(LoginPage.emailField, email);
+      await this.fillField(LoginPage.passwordField, password);
+      await this.click(LoginPage.submitButton);
+
       await this.waitForText('Logged in as', 10);
     },
+
     async logout(this: CodeceptJS.I) {
       try {
-        await this.click('Logout');
-        await this.see('Login to your account');
+        await this.click(LoginPage.logoutLink);
+        await this.see(LoginPage.loginTitle);
       } catch (e) {
         this.say('Пользователь не был залогинен — пропускаем logout');
       }

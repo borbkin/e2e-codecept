@@ -1,11 +1,11 @@
 import { setHeadlessWhen, setCommonPlugins } from '@codeceptjs/configure';
+import { RegistrationPage } from './src/pages/RegistrationPage';
 
-// Автоматическое скрытие браузера при запуске с HEADLESS=true
 setHeadlessWhen(process.env.HEADLESS);
 setCommonPlugins();
 
 export const config: CodeceptJS.MainConfig = {
-  tests: './tests/**/*_test.ts',
+  tests: './src/tests/**/*_test.ts',
   output: './output',
   helpers: {
     Playwright: {
@@ -15,7 +15,9 @@ export const config: CodeceptJS.MainConfig = {
     }
   },
   include: {
-    I: './steps_file'
+    I: './steps_file',
+    LoginPage: './src/pages/LoginPage.ts',
+    RegistrationPage: './src/pages/RegistrationPage.ts'
   },
   plugins: {
     screenshotOnFail: {
@@ -32,5 +34,5 @@ export const config: CodeceptJS.MainConfig = {
       useCucumberStepReporter: false
     }
   },
-  name: 'e2e-codecept',
+  name: 'e2e-codecept'
 };
