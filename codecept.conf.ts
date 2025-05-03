@@ -24,6 +24,11 @@ export const config: CodeceptJS.MainConfig = {
     retryFailedStep: {
       enabled: true,
       retries: 1
+    },
+    allure: {
+      enabled: true,
+      outputDir: 'output',
+      useCucumberStepReporter: false
     }
   },
   name: 'e2e-codecept',

@@ -29,3 +29,13 @@ jobs:
 
       - name: Run CodeceptJS tests
         run: HEADLESS=true npx codeceptjs run --steps
+
+      - name: Generate Allure Report
+        run: |
+          npx allure generate output --clean -o output/allure-report
+
+      - name: Upload Allure Report as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-report
+          path: output/allure-report
