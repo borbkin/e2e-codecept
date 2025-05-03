@@ -31,13 +31,13 @@ jobs:
         run: HEADLESS=true npx codeceptjs run --plugins allure --steps
 
       - name: Generate Allure Report
-        run: npx allure generate output --clean -o output/allure-report
+        run: npx allure generate allure-results --clean -o allure-report
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: output/allure-report
+          publish_dir: allure-report
 
       - name: Add link to Allure report in summary
         run: |
