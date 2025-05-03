@@ -7,8 +7,7 @@ export const LoginPage = {
     emailField: '[data-qa="login-email"]',
     passwordField: '[data-qa="login-password"]',
     submitButton: '[data-qa="login-button"]',
-  
-    errorMessage: '.login-form .alert-danger',
+    
     loggedInText: (name: string) => `Logged in as ${name}`,
     loginTitle: 'Login to your account',
   
@@ -20,4 +19,4 @@ export const LoginPage = {
     accountCreatedMessage: 'Account Created!',
   
     cookiesConsentButton: '.fc-cta-consent'
-};
+  };
