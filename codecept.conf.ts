@@ -27,7 +27,8 @@ export const config: CodeceptJS.MainConfig = {
     },
     allure: {
       enabled: true,
-      outputDir: 'output',
+      require: 'allure-codeceptjs',
+      outputDir: 'allure-results',
       useCucumberStepReporter: false
     }
   },
