@@ -1,0 +1,5 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","10559","Регистрация нового пользователя","User Registration","Sat May 03 13:07:34 UTC 2025","passed","Sat May 03 13:07:45 UTC 2025","","","",""
+"","7074","Негативный вход по email и паролю","Login page","Sat May 03 13:07:46 UTC 2025","passed","Sat May 03 13:07:53 UTC 2025","","","",""
+"","1138","Открытие страницы логина","Login page","Sat May 03 13:07:45 UTC 2025","passed","Sat May 03 13:07:46 UTC 2025","","","",""
+"","17089","Позитивный вход по email и паролю","Login page","Sat May 03 13:07:53 UTC 2025","passed","Sat May 03 13:08:10 UTC 2025","","","",""
