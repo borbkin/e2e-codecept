@@ -1,9 +1,7 @@
 import { setHeadlessWhen, setCommonPlugins } from '@codeceptjs/configure';
-// turn on headless mode when running with HEADLESS=true environment variable
-// export HEADLESS=true && npx codeceptjs run
-setHeadlessWhen(process.env.HEADLESS);
 
-// enable all common plugins https://github.com/codeceptjs/configure#setcommonplugins
+// Автоматическое скрытие браузера при запуске с HEADLESS=true
+setHeadlessWhen(process.env.HEADLESS);
 setCommonPlugins();
 
 export const config: CodeceptJS.MainConfig = {
@@ -13,11 +11,11 @@ export const config: CodeceptJS.MainConfig = {
     Playwright: {
       browser: 'chromium',
       url: 'https://automationexercise.com',
-      show: true
+      show: process.env.HEADLESS !== 'true'
     }
   },
   include: {
     I: './steps_file'
   },
   name: 'e2e-codecept'
-}
+};
