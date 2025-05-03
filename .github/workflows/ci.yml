@@ -28,14 +28,13 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run CodeceptJS tests
-        run: HEADLESS=true npx codeceptjs run --steps
+        run: HEADLESS=true npx codeceptjs run --plugins allure --steps
 
       - name: Generate Allure Report
-        run: |
-          npx allure generate output --clean -o output/allure-report
+        run: npx allure generate output --clean -o output/allure-report
 
       - name: Upload Allure Report as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.3
         with:
           name: allure-report
           path: output/allure-report
