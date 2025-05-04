@@ -2,7 +2,7 @@ import { LoginPage } from '../pages/LoginPage';
 import { RegistrationPage } from '../pages/RegistrationPage';
 import { generateUserData } from '../utils/factories';
 import { allureHelper as a } from '../utils/allureHelper';
-import { tag } from '../../plugins/tagFilterPlugin';
+import { tag } from '../../plugins/tagFilter';
 
 Feature('Регистрация через интерфейс');
 

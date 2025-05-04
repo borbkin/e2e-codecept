@@ -1,7 +1,7 @@
 import { LoginPage } from '../pages/LoginPage';
 import { generateUserData } from '../utils/factories';
 import { allureHelper as a } from '../utils/allureHelper';
-import { tag } from '../../plugins/tagFilterPlugin';
+import { tag } from '../../plugins/tagFilter';
 
 Feature('Login page — негативные сценарии');
 
