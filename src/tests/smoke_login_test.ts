@@ -1,11 +1,11 @@
 import { LoginPage } from '../pages/LoginPage';
-import { generateUserData } from '../utils/factories';
 import { allureHelper as a } from '../utils/allureHelper';
+import { tag } from '../../plugins/tagFilterPlugin';
 
 Feature('Login page — позитивные сценарии');
 
-// @ui @positive @smoke
 Scenario('Открытие страницы логина', async ({ I }) => {
+  tag('smoke');  
   a.setEpic('Login');
   a.setStory('Негативные сценарии');
   a.setSeverity('critical');
