@@ -9,8 +9,9 @@ on:
     - cron: '0 9 * * *' # каждый день в 09:00 UTC (12:00 по МСК)
 
 jobs:
-  smoke-tests:
+  test:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -26,70 +27,21 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Run Smoke Tests
-        run: HEADLESS=true TAGS=smoke npx codeceptjs run --plugins allure --steps
-
-      - name: Upload Allure Results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-results-smoke
-          path: allure-results/
+      - name: Run CodeceptJS tests
+        run: HEADLESS=true npx codeceptjs run --plugins allure --steps
 
       - name: Upload Playwright traces
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-traces-smoke
+          name: playwright-traces
           path: output/
 
       - name: Upload screenshots
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: screenshots-smoke
-          path: output/
-
-  regression-tests:
-    needs: smoke-tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
-
-      - name: Download Allure Results from Smoke
-        if: always()
-        uses: actions/download-artifact@v4
-        with:
-          name: allure-results-smoke
-          path: allure-results
-
-      - name: Run Regression Tests
-        run: HEADLESS=true TAGS=regression npx codeceptjs run --plugins allure --steps
-
-      - name: Upload Playwright traces
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-traces-regression
-          path: output/
-
-      - name: Upload screenshots
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: screenshots-regression
+          name: screenshots
           path: output/
 
       - name: Generate Allure Report

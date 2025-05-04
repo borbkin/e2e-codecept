@@ -1,14 +1,12 @@
 import { LoginPage } from '../pages/LoginPage';
 import { generateUserData } from '../utils/factories';
 import { allureHelper as a } from '../utils/allureHelper';
-import { tag } from '../../plugins/tagFilter';
 
 Feature('Login page — негативные сценарии');
 
 const invalidUserData = generateUserData();
 
 Scenario('Ошибка при вводе некорректных email и пароля', async ({ I }) => {
-  tag('regression');
   a.setEpic('Login');
   a.setStory('Негативные сценарии');
   a.setSeverity('critical');

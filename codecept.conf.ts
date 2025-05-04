@@ -42,11 +42,6 @@ export const config: CodeceptJS.MainConfig = {
       outputDir: 'allure-results',
       useCucumberStepReporter: false
     },
-    tagFilterPlugin: {
-      require: './plugins/tagFilter.ts',
-      enabled: true,
-      tagFilter: process.env.TAGS?.split(',') || [],
-    }
   },
   name: 'e2e-codecept'
 };

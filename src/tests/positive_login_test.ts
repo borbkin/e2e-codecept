@@ -1,7 +1,6 @@
 import { LoginPage } from '../pages/LoginPage';
 import { generateUserData } from '../utils/factories';
 import { allureHelper as a } from '../utils/allureHelper';
-import { tag } from '../../plugins/tagFilter';
 
 Feature('Login page — позитивные сценарии');
 
@@ -13,7 +12,6 @@ Before(async ({ I }) => {
 
 
 Scenario('Пользователь может войти с валидными email и паролем', async ({ I }) => {
-  tag('regression');
   a.setEpic('Login');
   a.setStory('Позитивный сценарий входа');
   a.setSeverity('blocker');

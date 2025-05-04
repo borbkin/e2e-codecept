@@ -2,14 +2,12 @@ import { LoginPage } from '../pages/LoginPage';
 import { RegistrationPage } from '../pages/RegistrationPage';
 import { generateUserData } from '../utils/factories';
 import { allureHelper as a } from '../utils/allureHelper';
-import { tag } from '../../plugins/tagFilter';
 
 Feature('Регистрация через интерфейс');
 
 const userData = generateUserData();
 
 Scenario('Пользователь может зарегистрироваться через UI', async ({ I }) => {
-  tag('regression');
   a.setEpic('Authorization');
   a.setFeature('Регистрация');
   a.setStory('Позитивный сценарий регистрации');
