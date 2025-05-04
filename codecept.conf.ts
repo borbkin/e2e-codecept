@@ -41,7 +41,7 @@ export const config: CodeceptJS.MainConfig = {
       require: 'allure-codeceptjs',
       outputDir: 'allure-results',
       useCucumberStepReporter: false
-    }
+    },
   },
   name: 'e2e-codecept'
 };
