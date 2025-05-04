@@ -1,18 +1,8 @@
 import { LoginPage } from '../pages/LoginPage';
-import { allureHelper as a } from '../utils/allureHelper';
 
-Feature('Login page — позитивные сценарии');
+Feature('Базовые смоук-сценарии');
 
 Scenario('Открытие страницы логина', async ({ I }) => { 
-  a.setEpic('Login');
-  a.setStory('Базовые сценарии');
-  a.setSeverity('critical');
-
-  await a.step('Открываем страницу логина', async () => {
-    await I.amOnPage(LoginPage.url);
-  });
-
-  await a.step('Проверяем наличие заголовка страницы', async () => {
-    await I.see(LoginPage.loginTitle);
-  });
+  await I.amOnPage(LoginPage.url);
+  await I.see(LoginPage.loginTitle);
 });
