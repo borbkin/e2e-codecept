@@ -43,7 +43,7 @@ export const config: CodeceptJS.MainConfig = {
       useCucumberStepReporter: false
     },
     tagFilterPlugin: {
-      require: './plugins/tagFilterPlugin.ts',
+      require: './plugins/tagFilter.ts',
       enabled: true,
       tagFilter: process.env.TAGS?.split(',') || [],
     }
