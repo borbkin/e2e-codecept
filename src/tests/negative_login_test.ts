@@ -6,7 +6,7 @@ Feature('Login page — негативные сценарии');
 
 const invalidUserData = generateUserData();
 
-// @ui @positive @regression @smoke
+// @ui @positive @smoke
 Scenario('Открытие страницы логина', async ({ I }) => {
   a.setEpic('Login');
   a.setStory('Негативные сценарии');
