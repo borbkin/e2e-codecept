@@ -1,6 +1,14 @@
 import AllureApi from 'allure-codeceptjs';
 
-const globalAllure = global.allure as ReturnType<typeof AllureApi>;
+const noop = {
+  label: () => {},
+  severity: () => {},
+  parameter: () => {},
+  step: async (_name: string, body: () => Promise<void>) => await body(),
+  attachment: () => {}
+};
+
+const globalAllure = (global.allure ?? noop) as ReturnType<typeof AllureApi>;
 
 export const allureHelper = {
   setEpic(epic: string) {
