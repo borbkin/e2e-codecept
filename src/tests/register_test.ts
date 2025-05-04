@@ -1,22 +1,22 @@
 import { LoginPage } from '../pages/LoginPage';
 import { RegistrationPage } from '../pages/RegistrationPage';
+import { generateUserData } from '../utils/factories';
 
 Feature('Регистрация через интерфейс');
 
+const userData = generateUserData();
+
 Scenario('Пользователь может зарегистрироваться через UI', async ({ I }) => {
-  const name = 'UI User';
-  const email = `uiuser_${Date.now()}@example.com`;
-  const password = '123456';
 
   await I.amOnPage(LoginPage.url);
   await I.acceptCookiesIfVisible();
 
-  await I.fillField(RegistrationPage.nameField, name);
-  await I.fillField(RegistrationPage.emailField, email);
+  await I.fillField(RegistrationPage.nameField, userData.name);
+  await I.fillField(RegistrationPage.emailField, userData.email);
   await I.click(RegistrationPage.signupButton);
 
   await I.waitForElement(RegistrationPage.passwordField, 5);
-  await I.fillField(RegistrationPage.passwordField, password);
+  await I.fillField(RegistrationPage.passwordField, userData.password);
   await I.selectOption(RegistrationPage.daySelect, '3');
   await I.selectOption(RegistrationPage.monthSelect, 'April');
   await I.selectOption(RegistrationPage.yearSelect, '1994');
@@ -34,9 +34,11 @@ Scenario('Пользователь может зарегистрироватьс
   await I.waitForText(RegistrationPage.accountCreatedText, 10);
   await I.click(RegistrationPage.continueButton);
 
-  await I.see(LoginPage.loggedInText(name));
+  await I.see(LoginPage.loggedInText(userData.name));
+});
 
-  // Подчищаем после себя
+After(async ({ I }) => {
+  // Удаляем тестового пользователя, если он был создан
   await I.logout();
-  await I.deleteTestUser(email, password);
+  await I.deleteTestUser(userData.email, userData.password);
 });
