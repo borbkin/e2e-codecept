@@ -1,5 +1,4 @@
 import { setHeadlessWhen, setCommonPlugins } from '@codeceptjs/configure';
-import { RegistrationPage } from './src/pages/RegistrationPage';
 
 setHeadlessWhen(process.env.HEADLESS);
 setCommonPlugins();

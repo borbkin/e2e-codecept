@@ -1,9 +1,7 @@
 import { LoginPage } from '../pages/LoginPage';
-import { generateUserData } from '../utils/factories';
+import { buildTestUser } from '../utils/testUser';
 
 Feature('Login page');
-
-const invalidUserData = generateUserData();
 
 Scenario('Открытие страницы логина', async ({ I }) => {
   await I.amOnPage(LoginPage.url);
@@ -11,6 +9,8 @@ Scenario('Открытие страницы логина', async ({ I }) => {
 });
 
 Scenario('Негативный вход по email и паролю', async ({ I }) => {
+  const invalidUserData = buildTestUser();
+
   await I.amOnPage(LoginPage.url);
   await I.acceptCookiesIfVisible();
 

@@ -1,4 +1,6 @@
 node_modules
 output
 allure-results
+allure-report
+.eslintcache
 .DS_Store
