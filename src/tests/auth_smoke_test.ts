@@ -48,25 +48,44 @@ Scenario('Пользователь видит ошибку при повторн
 
 Scenario('Пользователь может удалить аккаунт через UI', async ({ I }) => {
   const user = buildTestUser();
+  let accountDeletedViaUi = false;
 
-  await I.registerNewUser(user);
+  try {
+    await I.registerNewUser(user);
 
-  await I.amOnPage(LoginPage.url);
-  await I.acceptCookiesIfVisible();
+    await I.amOnPage(LoginPage.url);
+    await I.acceptCookiesIfVisible();
 
-  await I.fillField(LoginPage.emailField, user.email);
-  await I.fillField(LoginPage.passwordField, user.password);
-  await I.click(LoginPage.submitButton);
+    await I.fillField(LoginPage.emailField, user.email);
+    await I.fillField(LoginPage.passwordField, user.password);
+    await I.click(LoginPage.submitButton);
 
-  await I.waitForText('Logged in as', 10);
-  await I.see(LoginPage.deleteAccountLink);
+    await I.waitForText('Logged in as', 10);
+    await I.seeElement(LoginPage.deleteAccountLinkSelector);
 
-  await I.click(LoginPage.deleteAccountLink);
-  await I.waitForText(LoginPage.accountDeletedMessage, 20);
-  await I.see(LoginPage.accountDeletedMessage);
-  await I.waitForElement(LoginPage.continueButton, 10);
-  await I.click(LoginPage.continueButton);
-  await I.see(LoginPage.signupOrLoginLink);
+    await I.usePlaywrightTo('перейти на страницу удаления аккаунта', async ({ page }) => {
+      const deleteAccountLink = page.locator(LoginPage.deleteAccountLinkSelector).first();
+
+      await deleteAccountLink.waitFor({ state: 'visible', timeout: 10000 });
+      await Promise.all([
+        page.waitForURL(/\/delete_account(?:[/?#]|$)/, { timeout: 20000 }),
+        deleteAccountLink.click()
+      ]);
+    });
+
+    await I.waitForElement(LoginPage.accountDeletedBanner, 20);
+    await I.see(LoginPage.accountDeletedMessage, LoginPage.accountDeletedBanner);
+
+    accountDeletedViaUi = true;
+
+    await I.waitForElement(LoginPage.continueButton, 10);
+    await I.click(LoginPage.continueButton);
+    await I.see(LoginPage.signupOrLoginLink);
+  } finally {
+    if (!accountDeletedViaUi) {
+      await I.deleteTestUser(user.email, user.password);
+    }
+  }
 });
 
 Scenario('Форма логина валидирует обязательный пароль', async ({ I }) => {

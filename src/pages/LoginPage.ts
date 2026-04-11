@@ -17,6 +17,8 @@ export const LoginPage = {
   continueButton: '[data-qa="continue-button"]',
   logoutLink: 'Logout',
   deleteAccountLink: 'Delete Account',
+  deleteAccountLinkSelector: 'a[href="/delete_account"]',
   accountCreatedMessage: 'Account Created!',
+  accountDeletedBanner: '[data-qa="account-deleted"]',
   accountDeletedMessage: 'ACCOUNT DELETED!'
 };
