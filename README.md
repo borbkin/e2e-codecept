@@ -44,6 +44,7 @@ npx playwright install --with-deps
 npm test
 npm run test:headed
 npm run test:allure
+npm run lint
 npm run typecheck
 npm run list
 ```

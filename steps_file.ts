@@ -1,3 +1,4 @@
+import { Page } from 'playwright';
 import { LoginPage } from './src/pages/LoginPage';
 import { CookieBanner } from './src/fragments/CookieBanner';
 import { TestUser } from './src/utils/testUser';
@@ -10,7 +11,7 @@ export = function() {
 
       let bannerVisible = false;
 
-      await this.usePlaywrightTo('проверить баннер cookies', async ({ page }) => {
+      await this.usePlaywrightTo('проверить баннер cookies', async ({ page }: { page: Page }) => {
         const consentButton = page.locator(CookieBanner.acceptButton).first();
 
         try {

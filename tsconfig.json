@@ -7,7 +7,10 @@
     "lib": ["es2018", "DOM"],
     "esModuleInterop": true,
     "module": "commonjs",
-    "strictNullChecks": false,
+    "moduleResolution": "node",
+    "strictNullChecks": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "types": ["codeceptjs", "node"],
     "declaration": true,
     "skipLibCheck": true
