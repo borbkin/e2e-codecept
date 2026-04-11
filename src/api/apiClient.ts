@@ -2,6 +2,7 @@ import axios from 'axios';
 import { TestUser } from '../utils/testUser';
 
 const API_URL = 'https://automationexercise.com/api';
+const API_TIMEOUT_MS = Number(process.env.API_TIMEOUT_MS ?? 10_000);
 
 export async function createUserViaAPI(user: TestUser) {
   const formData = new URLSearchParams();
@@ -22,7 +23,8 @@ export async function createUserViaAPI(user: TestUser) {
   formData.append('mobile_number', user.mobileNumber);
 
   const response = await axios.post(`${API_URL}/createAccount`, formData.toString(), {
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    timeout: API_TIMEOUT_MS
   });
 
   if (response.data?.responseCode !== 201) {
@@ -40,10 +42,13 @@ export async function deleteUserViaAPI(data: {
 
   const response = await axios.delete(`${API_URL}/deleteAccount`, {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    data: formData.toString()
+    data: formData.toString(),
+    timeout: API_TIMEOUT_MS
   });
 
   if (response.data?.responseCode !== 200) {
-    console.warn(`deleteUserViaAPI warning: ${response.data?.message}`);
+    throw new Error(
+      `deleteUserViaAPI failed: responseCode=${response.data?.responseCode}, message=${response.data?.message}`
+    );
   }
 }

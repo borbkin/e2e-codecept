@@ -4,6 +4,8 @@ import { CookieBanner } from './src/fragments/CookieBanner';
 import { TestUser } from './src/utils/testUser';
 import { createUserViaAPI, deleteUserViaAPI } from './src/api/apiClient';
 
+const COOKIE_BANNER_TIMEOUT_MS = 5000;
+
 export = function() {
   return actor({
     async acceptCookiesIfVisible(this: CodeceptJS.I) {
@@ -15,7 +17,7 @@ export = function() {
         const consentButton = page.locator(CookieBanner.acceptButton).first();
 
         try {
-          await consentButton.waitFor({ state: 'visible', timeout: 2000 });
+          await consentButton.waitFor({ state: 'visible', timeout: COOKIE_BANNER_TIMEOUT_MS });
           bannerVisible = true;
         } catch (error) {
           const isTimeoutError = error instanceof Error && error.name === 'TimeoutError';

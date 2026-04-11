@@ -71,12 +71,12 @@ npx codeceptjs run src/tests/positive_login_test.ts
 
 ## CI
 
-Workflow [`.github/workflows/ci.yml`](/Users/boris/repos/e2e-codecept/.github/workflows/ci.yml:1):
+Workflow [`.github/workflows/ci.yml`](./.github/workflows/ci.yml):
 
-- запускается на `push` и `pull_request` в `master`
+- запускается при `push` и `pull_request` в `master`
 - запускается по расписанию каждый день в 12:00 по Москве
-- прогоняет CodeceptJS тесты в headless-режиме
-- сохраняет артефакты падений
+- прогоняет тесты CodeceptJS в headless-режиме
+- сохраняет артефакты при падениях
 - генерирует и публикует Allure-отчет на GitHub Pages
 
 Последний опубликованный отчет: [borbkin.github.io/e2e-codecept](https://borbkin.github.io/e2e-codecept/)
