@@ -44,9 +44,15 @@ export = function() {
     },
 
     async logout(this: CodeceptJS.I) {
-      const logoutLinkVisible = await this.grabNumberOfVisibleElements(LoginPage.logoutLink);
+      let logoutLinkVisible = false;
 
-      if (logoutLinkVisible === 0) {
+      await this.usePlaywrightTo('проверить ссылку logout', async ({ page }: { page: Page }) => {
+        const logoutLink = page.getByRole('link', { name: LoginPage.logoutLink }).first();
+
+        logoutLinkVisible = await logoutLink.isVisible().catch(() => false);
+      });
+
+      if (!logoutLinkVisible) {
         this.say('Пользователь не был залогинен — пропускаем logout');
         return;
       }
