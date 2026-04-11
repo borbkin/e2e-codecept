@@ -1,12 +1,13 @@
 import { LoginPage } from '../pages/LoginPage';
-import { generateUserData } from '../utils/factories';
+import { buildTestUser, TestUser } from '../utils/testUser';
 
 Feature('Login page');
 
-const userData = generateUserData();
+let userData: TestUser;
 
 Before(async ({ I }) => {
-  await I.registerNewUser(userData.name, userData.email, userData.password);
+  userData = buildTestUser();
+  await I.registerNewUser(userData);
 });
 
 Scenario('Позитивный вход по email и паролю', async ({ I }) => {

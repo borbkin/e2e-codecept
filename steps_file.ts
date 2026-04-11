@@ -1,5 +1,5 @@
 import { LoginPage } from './src/pages/LoginPage';
-import { RegistrationPage } from './src/pages/RegistrationPage';
+import { TestUser } from './src/utils/testUser';
 import { createUserViaAPI, deleteUserViaAPI } from './src/api/apiClient';
 
 export = function() {
@@ -19,9 +19,9 @@ export = function() {
       }
     },
 
-    async registerNewUser(this: CodeceptJS.I, name: string, email: string, password: string) {
+    async registerNewUser(this: CodeceptJS.I, user: TestUser) {
       this.say('Создаём пользователя через API');
-      await createUserViaAPI({ name, email, password });
+      await createUserViaAPI(user);
     },
 
     async logout(this: CodeceptJS.I) {

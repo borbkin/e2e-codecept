@@ -1,13 +1,16 @@
 import { LoginPage } from '../pages/LoginPage';
 import { RegistrationPage } from '../pages/RegistrationPage';
-import { generateUserData } from '../utils/factories';
+import { buildTestUser, TestUser } from '../utils/testUser';
 
 Feature('Регистрация через интерфейс');
 
-const userData = generateUserData();
+let userData: TestUser;
+
+Before(() => {
+  userData = buildTestUser();
+});
 
 Scenario('Пользователь может зарегистрироваться через UI', async ({ I }) => {
-
   await I.amOnPage(LoginPage.url);
   await I.acceptCookiesIfVisible();
 
@@ -17,18 +20,18 @@ Scenario('Пользователь может зарегистрироватьс
 
   await I.waitForElement(RegistrationPage.passwordField, 5);
   await I.fillField(RegistrationPage.passwordField, userData.password);
-  await I.selectOption(RegistrationPage.daySelect, '3');
-  await I.selectOption(RegistrationPage.monthSelect, 'April');
-  await I.selectOption(RegistrationPage.yearSelect, '1994');
+  await I.selectOption(RegistrationPage.daySelect, userData.birthDay);
+  await I.selectOption(RegistrationPage.monthSelect, userData.birthMonth);
+  await I.selectOption(RegistrationPage.yearSelect, userData.birthYear);
 
-  await I.fillField(RegistrationPage.firstNameField, 'Test');
-  await I.fillField(RegistrationPage.lastNameField, 'User');
-  await I.fillField(RegistrationPage.addressField, '123 Test Street');
-  await I.selectOption(RegistrationPage.countrySelect, 'Canada');
-  await I.fillField(RegistrationPage.stateField, 'Ontario');
-  await I.fillField(RegistrationPage.cityField, 'Toronto');
-  await I.fillField(RegistrationPage.zipcodeField, 'M1M1M1');
-  await I.fillField(RegistrationPage.mobileField, '+1234567890');
+  await I.fillField(RegistrationPage.firstNameField, userData.firstName);
+  await I.fillField(RegistrationPage.lastNameField, userData.lastName);
+  await I.fillField(RegistrationPage.addressField, userData.address);
+  await I.selectOption(RegistrationPage.countrySelect, userData.country);
+  await I.fillField(RegistrationPage.stateField, userData.state);
+  await I.fillField(RegistrationPage.cityField, userData.city);
+  await I.fillField(RegistrationPage.zipcodeField, userData.zipcode);
+  await I.fillField(RegistrationPage.mobileField, userData.mobileNumber);
 
   await I.click(RegistrationPage.createAccountButton);
   await I.waitForText(RegistrationPage.accountCreatedText, 10);
