@@ -1,115 +1,81 @@
-# 🧪 E2E Testing with CodeceptJS + Playwright
+# E2E Testing with CodeceptJS + Playwright
 
-Этот проект содержит end-to-end тесты для [automationexercise.com](https://automationexercise.com) с использованием CodeceptJS, Playwright и Allure-отчётов.
+Репозиторий содержит UI e2e-тесты для [automationexercise.com](https://automationexercise.com) на базе CodeceptJS, Playwright, TypeScript и Allure.
 
-📌 [Подробнее обо мне — см. ABOUT.md](./ABOUT.md)
+[Подробнее обо мне — в ABOUT.md](./ABOUT.md)
 
-## 📁 Структура проекта
+## Что есть в проекте
 
-```
-├── .github/workflows/        # CI: запуск тестов, генерация отчётов, деплой на GitHub Pages
+- UI-сценарии на логин и регистрацию
+- Page Object слой
+- Генерация тестовых данных
+- API-хелперы для подготовки и очистки пользователей
+- Allure-отчеты и артефакты Playwright
+- GitHub Actions для запуска тестов и публикации отчета
+
+## Структура
+
+```text
+├── .github/workflows/ci.yml
 ├── src/
-│   ├── pages/                # Page Object'ы
-│   ├── tests/                # UI-тесты
-│   ├── api/                  # API-клиенты
-│   └── utils/                # Генераторы данных и вспомогательные утилиты
-│
-├── output/                  # Скриншоты, видео и трейсы (после запуска)
-├── allure-report/           # Статический отчёт Allure (деплоится на GitHub Pages)
-├── allure-results/          # Результаты для генерации отчёта
-├── codecept.conf.ts         # Основной конфиг CodeceptJS
-├── steps_file.ts            # Кастомные шаги
-└── README.md
+│   ├── api/
+│   ├── pages/
+│   ├── tests/
+│   └── utils/
+├── codecept.conf.ts
+├── steps.d.ts
+├── steps_file.ts
+├── package.json
+└── tsconfig.json
 ```
 
-## 🚀 Основной стек
+`output/`, `allure-results/` и `allure-report/` создаются после запусков и не должны коммититься.
 
-* [CodeceptJS](https://codecept.io) + [Playwright helper](https://codecept.io/helpers/Playwright/)
-* TypeScript
-* [Allure reporter](https://docs.qameta.io/allure/)
-* GitHub Actions (CI/CD)
-
-## ✅ Что уже реализовано
-
-* UI-тесты на регистрацию и логин
-* Page Object паттерн
-* Генерация тестовых данных
-* API-хелперы для подготовки и очистки данных
-* Запуск в CI (headless)
-* Allure-отчёты: [открыть последний отчёт](https://borbkin.github.io/e2e-codecept/)
-* Автоматическое удаление тестовых пользователей через API
-
-## 🛠 Как запускать
-
-### Установка зависимостей
+## Установка
 
 ```bash
 npm ci
 npx playwright install --with-deps
 ```
 
-### Локальный запуск тестов
+## Команды
 
 ```bash
-npx codeceptjs run --plugins allure --steps
+npm test
+npm run test:headed
+npm run test:allure
+npm run typecheck
+npm run list
 ```
 
-### Просмотр отчёта Allure
+## Локальная отладка
+
+Headed-режим:
 
 ```bash
-npx allure generate allure-results --clean -o allure-report
-npx allure open allure-report
+npm run test:headed
 ```
 
-### Список всех тестов
+Playwright Inspector:
 
 ```bash
-npx codeceptjs list
+PWDEBUG=1 npx codeceptjs run --plugins allure --steps
 ```
 
-### Запуск только одного теста
+Запуск одного файла:
 
 ```bash
 npx codeceptjs run src/tests/positive_login_test.ts
 ```
 
-## 🤖 CI / GitHub Actions
+## CI
 
-Автоматически запускаются:
+Workflow [`.github/workflows/ci.yml`](/Users/boris/repos/e2e-codecept/.github/workflows/ci.yml:1):
 
-* при пуше в `master`
-* по расписанию (ежедневно в 12:00 по МСК)
+- запускается на `push` и `pull_request` в `master`
+- запускается по расписанию каждый день в 12:00 по Москве
+- прогоняет CodeceptJS тесты в headless-режиме
+- сохраняет артефакты падений
+- генерирует и публикует Allure-отчет на GitHub Pages
 
-CI делает следующее:
-
-* устанавливает зависимости
-* запускает браузеры
-* выполняет e2e-тесты
-* собирает отчёт Allure
-* публикует его на GitHub Pages
-* добавляет ссылку в summary билда
-
-## 📌 Полезные команды
-
-* Открыть Playwright Inspector:
-
-```bash
-PWDEBUG=1 npx codeceptjs run
-```
-
-* Запустить в режиме headed:
-
-```bash
-HEADLESS=false npx codeceptjs run
-```
-
-## 🔭 Планы на будущее
-
-* [ ] Нефункциональное тестирование (нагрузка, консольные ошибки, логирование)
-* [ ] Тесты мобильной версии сайта
-* [ ] API-тесты на Go (в отдельной папке)
-* [ ] Расширение отчётов: severity, epic, story, issue
-* [ ] Визуальные регрессии и тестирование доступности
----
-
-> 🚧 Проект живой. Новые виды тестов и CI-интеграции добавляются по мере развития.
+Последний опубликованный отчет: [borbkin.github.io/e2e-codecept](https://borbkin.github.io/e2e-codecept/)
