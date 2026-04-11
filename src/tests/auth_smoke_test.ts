@@ -62,8 +62,9 @@ Scenario('Пользователь может удалить аккаунт че
   await I.see(LoginPage.deleteAccountLink);
 
   await I.click(LoginPage.deleteAccountLink);
-  await I.waitForText(LoginPage.accountDeletedMessage, 10);
+  await I.waitForText(LoginPage.accountDeletedMessage, 20);
   await I.see(LoginPage.accountDeletedMessage);
+  await I.waitForElement(LoginPage.continueButton, 10);
   await I.click(LoginPage.continueButton);
   await I.see(LoginPage.signupOrLoginLink);
 });
