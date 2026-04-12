@@ -8,7 +8,7 @@
 
 - UI-сценарии на логин и регистрацию
 - Page Object слой
-- Генерация тестовых данных
+- Генерация тестовых данных для пользователей, адресов, товаров и заказов
 - API-хелперы для подготовки и очистки пользователей
 - Allure-отчеты и артефакты Playwright
 - GitHub Actions для запуска тестов и публикации отчета
@@ -19,6 +19,8 @@
 ├── .github/workflows/ci.yml
 ├── src/
 │   ├── api/
+│   ├── fragments/
+│   ├── helpers/
 │   ├── pages/
 │   ├── tests/
 │   └── utils/
@@ -30,6 +32,8 @@
 ```
 
 `output/`, `allure-results/` и `allure-report/` создаются после запусков и не должны коммититься.
+
+В [src/utils/testData.ts](/Users/boris/repos/e2e-codecept/src/utils/testData.ts:1) лежат генераторы для `address`, `product` и `order`, а [src/utils/testUser.ts](/Users/boris/repos/e2e-codecept/src/utils/testUser.ts:1) использует адресный builder повторно.
 
 ## Установка
 
