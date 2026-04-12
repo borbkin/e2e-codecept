@@ -37,6 +37,7 @@ Scenario('Пользователь может зарегистрироватьс
   await I.waitForText(RegistrationPage.accountCreatedText, 10);
   await I.click(RegistrationPage.continueButton);
 
+  await I.waitForText('Logged in as', 10);
   await I.see(LoginPage.loggedInText(userData.name));
 });
 

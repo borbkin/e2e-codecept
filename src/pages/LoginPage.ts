@@ -1,16 +1,24 @@
 export const LoginPage = {
   url: '/login',
+  signupOrLoginLink: 'Signup / Login',
   signupName: '[data-qa="signup-name"]',
   signupEmail: '[data-qa="signup-email"]',
   signupButton: '[data-qa="signup-button"]',
   emailField: '[data-qa="login-email"]',
   passwordField: '[data-qa="login-password"]',
   submitButton: '[data-qa="login-button"]',
+  loginForm: '.login-form',
+  signupForm: '.signup-form',
   loggedInText: (name: string) => `Logged in as ${name}`,
   loginTitle: 'Login to your account',
+  duplicateEmailError: 'Email Address already exist!',
   createAccountPassword: '#password',
   createButton: '[data-qa="create-account"]',
   continueButton: '[data-qa="continue-button"]',
   logoutLink: 'Logout',
-  accountCreatedMessage: 'Account Created!'
+  deleteAccountLink: 'Delete Account',
+  deleteAccountLinkSelector: 'a[href="/delete_account"]',
+  accountCreatedMessage: 'Account Created!',
+  accountDeletedBanner: '[data-qa="account-deleted"]',
+  accountDeletedMessage: 'ACCOUNT DELETED!'
 };
