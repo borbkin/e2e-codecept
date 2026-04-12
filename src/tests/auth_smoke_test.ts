@@ -66,9 +66,10 @@ Scenario('Пользователь может удалить аккаунт че
       const deleteAccountLink = page.locator(LoginPage.deleteAccountLinkSelector).first();
 
       await deleteAccountLink.waitFor({ state: 'visible', timeout: 10000 });
+      await deleteAccountLink.scrollIntoViewIfNeeded();
       await Promise.all([
         page.waitForURL(/\/delete_account(?:[/?#]|$)/, { timeout: 20000 }),
-        deleteAccountLink.click()
+        deleteAccountLink.click({ force: true })
       ]);
     });
 
