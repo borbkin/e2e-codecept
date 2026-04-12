@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import { buildTestAddress } from './testData';
 
 export interface TestUser {
   name: string;
@@ -19,8 +20,9 @@ export interface TestUser {
 }
 
 export function buildTestUser(overrides: Partial<TestUser> = {}): TestUser {
-  const firstName = faker.person.firstName();
-  const lastName = faker.person.lastName();
+  const address = buildTestAddress();
+  const firstName = address.firstName;
+  const lastName = address.lastName;
 
   return {
     name: `${firstName} ${lastName}`,
@@ -32,12 +34,12 @@ export function buildTestUser(overrides: Partial<TestUser> = {}): TestUser {
     birthYear: '1994',
     firstName,
     lastName,
-    address: faker.location.streetAddress(),
-    country: 'Canada',
-    state: faker.location.state(),
-    city: faker.location.city(),
-    zipcode: faker.location.zipCode('#####'),
-    mobileNumber: `+1${faker.string.numeric(10)}`,
+    address: address.address,
+    country: address.country,
+    state: address.state,
+    city: address.city,
+    zipcode: address.zipcode,
+    mobileNumber: address.mobileNumber,
     ...overrides
   };
 }
