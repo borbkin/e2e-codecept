@@ -1,15 +1,8 @@
-import { LoginPage } from '../pages/LoginPage';
+import { AuthForm } from '../fragments/AuthForm';
+import { deleteAccountThroughUi, loginThroughUi, openAuthPage, submitSignupForm, assertLoggedOut } from '../helpers/authFlow';
 import { buildTestUser } from '../utils/testUser';
 
 Feature('Auth smoke');
-
-async function loginThroughUi(I: CodeceptJS.I, user: { email: string; password: string; name: string }) {
-  await I.fillField(LoginPage.emailField, user.email);
-  await I.fillField(LoginPage.passwordField, user.password);
-  await I.click(LoginPage.submitButton);
-  await I.waitForText('Logged in as', 10);
-  await I.see(LoginPage.loggedInText(user.name));
-}
 
 Scenario('Пользователь может выйти из аккаунта @smoke @regression @auth', async ({ I }) => {
   const user = buildTestUser();
@@ -17,13 +10,11 @@ Scenario('Пользователь может выйти из аккаунта @
   try {
     await I.registerNewUser(user);
 
-    await I.amOnPage(LoginPage.url);
-    await I.acceptCookiesIfVisible();
-
+    await openAuthPage(I);
     await loginThroughUi(I, user);
 
     await I.logout();
-    await I.see(LoginPage.loginTitle, LoginPage.loginForm);
+    await assertLoggedOut(I);
   } finally {
     await I.deleteTestUser(user.email, user.password);
   }
@@ -35,15 +26,11 @@ Scenario('Пользователь видит ошибку при повторн
   try {
     await I.registerNewUser(user);
 
-    await I.amOnPage(LoginPage.url);
-    await I.acceptCookiesIfVisible();
+    await openAuthPage(I);
+    await submitSignupForm(I, user);
 
-    await I.fillField(LoginPage.signupName, user.name);
-    await I.fillField(LoginPage.signupEmail, user.email);
-    await I.click(LoginPage.signupButton);
-
-    await I.waitForText(LoginPage.duplicateEmailError, 10, LoginPage.signupForm);
-    await I.see(LoginPage.duplicateEmailError, LoginPage.signupForm);
+    await I.waitForText(AuthForm.duplicateEmailError, 10, AuthForm.signupForm);
+    await I.see(AuthForm.duplicateEmailError, AuthForm.signupForm);
   } finally {
     await I.deleteTestUser(user.email, user.password);
   }
@@ -56,31 +43,10 @@ Scenario('Пользователь может удалить аккаунт че
   try {
     await I.registerNewUser(user);
 
-    await I.amOnPage(LoginPage.url);
-    await I.acceptCookiesIfVisible();
-
+    await openAuthPage(I);
     await loginThroughUi(I, user);
-    await I.seeElement(LoginPage.deleteAccountLinkSelector);
-
-    await I.usePlaywrightTo('перейти на страницу удаления аккаунта', async ({ page }) => {
-      const deleteAccountLink = page.locator(LoginPage.deleteAccountLinkSelector).first();
-
-      await deleteAccountLink.waitFor({ state: 'visible', timeout: 10000 });
-      await deleteAccountLink.scrollIntoViewIfNeeded();
-      await Promise.all([
-        page.waitForURL(/\/delete_account(?:[/?#]|$)/, { timeout: 20000 }),
-        deleteAccountLink.click({ force: true })
-      ]);
-    });
-
-    await I.waitForElement(LoginPage.accountDeletedBanner, 20);
-    await I.see(LoginPage.accountDeletedMessage, LoginPage.accountDeletedBanner);
-
+    await deleteAccountThroughUi(I);
     accountDeletedViaUi = true;
-
-    await I.waitForElement(LoginPage.continueButton, 10);
-    await I.click(LoginPage.continueButton);
-    await I.see(LoginPage.signupOrLoginLink);
   } finally {
     if (!accountDeletedViaUi) {
       await I.deleteTestUser(user.email, user.password);
@@ -91,14 +57,13 @@ Scenario('Пользователь может удалить аккаунт че
 Scenario('Форма логина валидирует обязательный пароль @regression @auth', async ({ I }) => {
   const user = buildTestUser();
 
-  await I.amOnPage(LoginPage.url);
-  await I.acceptCookiesIfVisible();
+  await openAuthPage(I);
 
-  await I.fillField(LoginPage.emailField, user.email);
-  await I.click(LoginPage.submitButton);
+  await I.fillField(AuthForm.loginEmailField, user.email);
+  await I.click(AuthForm.loginSubmitButton);
 
   await I.usePlaywrightTo('проверить native validation для обязательного пароля', async ({ page }) => {
-    const passwordField = page.locator(LoginPage.passwordField);
+    const passwordField = page.locator(AuthForm.loginPasswordField);
     const validationMessage = await passwordField.evaluate(
       element => (element as HTMLInputElement).validationMessage
     );
@@ -113,5 +78,5 @@ Scenario('Форма логина валидирует обязательный 
     }
   });
 
-  await I.see(LoginPage.loginTitle, LoginPage.loginForm);
+  await I.see(AuthForm.loginTitle, AuthForm.loginForm);
 });
