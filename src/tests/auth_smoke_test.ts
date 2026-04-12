@@ -11,7 +11,7 @@ async function loginThroughUi(I: CodeceptJS.I, user: { email: string; password: 
   await I.see(LoginPage.loggedInText(user.name));
 }
 
-Scenario('Пользователь может выйти из аккаунта', async ({ I }) => {
+Scenario('Пользователь может выйти из аккаунта @smoke @regression @auth', async ({ I }) => {
   const user = buildTestUser();
 
   try {
@@ -29,7 +29,7 @@ Scenario('Пользователь может выйти из аккаунта',
   }
 });
 
-Scenario('Пользователь видит ошибку при повторной регистрации с существующим email', async ({ I }) => {
+Scenario('Пользователь видит ошибку при повторной регистрации с существующим email @regression @auth', async ({ I }) => {
   const user = buildTestUser();
 
   try {
@@ -49,7 +49,7 @@ Scenario('Пользователь видит ошибку при повторн
   }
 });
 
-Scenario('Пользователь может удалить аккаунт через UI', async ({ I }) => {
+Scenario('Пользователь может удалить аккаунт через UI @smoke @regression @auth', async ({ I }) => {
   const user = buildTestUser();
   let accountDeletedViaUi = false;
 
@@ -88,7 +88,7 @@ Scenario('Пользователь может удалить аккаунт че
   }
 });
 
-Scenario('Форма логина валидирует обязательный пароль', async ({ I }) => {
+Scenario('Форма логина валидирует обязательный пароль @regression @auth', async ({ I }) => {
   const user = buildTestUser();
 
   await I.amOnPage(LoginPage.url);
