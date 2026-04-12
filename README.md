@@ -94,7 +94,7 @@ Workflow [`.github/workflows/ci.yml`](./.github/workflows/ci.yml):
 - запускается при `push` и `pull_request` в `master`
 - запускается по расписанию каждый день в 12:00 по Москве
 - на `pull_request` гоняет быстрый `smoke`-профиль
-- на `push` в `master` и по расписанию гоняет полный `regression`-профиль
+- на `pull_request`, `push` в `master` и по расписанию гоняет полный `regression`-профиль
 - сохраняет артефакты при падениях
 - для полного прогона генерирует и публикует Allure-отчет на GitHub Pages
 

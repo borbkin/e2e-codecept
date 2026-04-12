@@ -63,7 +63,6 @@ jobs:
           echo "   https://trace.playwright.dev" >> $GITHUB_STEP_SUMMARY
 
   test:
-    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
 
     steps:
