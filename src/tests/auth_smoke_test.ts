@@ -3,6 +3,14 @@ import { buildTestUser } from '../utils/testUser';
 
 Feature('Auth smoke');
 
+async function loginThroughUi(I: CodeceptJS.I, user: { email: string; password: string; name: string }) {
+  await I.fillField(LoginPage.emailField, user.email);
+  await I.fillField(LoginPage.passwordField, user.password);
+  await I.click(LoginPage.submitButton);
+  await I.waitForText('Logged in as', 10);
+  await I.see(LoginPage.loggedInText(user.name));
+}
+
 Scenario('Пользователь может выйти из аккаунта', async ({ I }) => {
   const user = buildTestUser();
 
@@ -12,12 +20,7 @@ Scenario('Пользователь может выйти из аккаунта',
     await I.amOnPage(LoginPage.url);
     await I.acceptCookiesIfVisible();
 
-    await I.fillField(LoginPage.emailField, user.email);
-    await I.fillField(LoginPage.passwordField, user.password);
-    await I.click(LoginPage.submitButton);
-
-    await I.waitForText('Logged in as', 10);
-    await I.see(LoginPage.loggedInText(user.name));
+    await loginThroughUi(I, user);
 
     await I.logout();
     await I.see(LoginPage.loginTitle, LoginPage.loginForm);
@@ -56,11 +59,7 @@ Scenario('Пользователь может удалить аккаунт че
     await I.amOnPage(LoginPage.url);
     await I.acceptCookiesIfVisible();
 
-    await I.fillField(LoginPage.emailField, user.email);
-    await I.fillField(LoginPage.passwordField, user.password);
-    await I.click(LoginPage.submitButton);
-
-    await I.waitForText('Logged in as', 10);
+    await loginThroughUi(I, user);
     await I.seeElement(LoginPage.deleteAccountLinkSelector);
 
     await I.usePlaywrightTo('перейти на страницу удаления аккаунта', async ({ page }) => {

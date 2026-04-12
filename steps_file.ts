@@ -5,6 +5,7 @@ import { TestUser } from './src/utils/testUser';
 import { createUserViaAPI, deleteUserViaAPI } from './src/api/apiClient';
 
 const COOKIE_BANNER_TIMEOUT_MS = 5000;
+const LOGOUT_LINK_TIMEOUT_MS = 3000;
 
 export = function() {
   return actor({
@@ -49,7 +50,18 @@ export = function() {
       await this.usePlaywrightTo('проверить ссылку logout', async ({ page }: { page: Page }) => {
         const logoutLink = page.getByRole('link', { name: LoginPage.logoutLink }).first();
 
-        logoutLinkVisible = await logoutLink.isVisible().catch(() => false);
+        try {
+          await logoutLink.waitFor({ state: 'visible', timeout: LOGOUT_LINK_TIMEOUT_MS });
+          logoutLinkVisible = true;
+        } catch (error) {
+          const isTimeoutError = error instanceof Error && error.name === 'TimeoutError';
+
+          if (!isTimeoutError) {
+            throw error;
+          }
+
+          logoutLinkVisible = false;
+        }
       });
 
       if (!logoutLinkVisible) {
