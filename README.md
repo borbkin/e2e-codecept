@@ -43,10 +43,28 @@ npx playwright install --with-deps
 ```bash
 npm test
 npm run test:headed
+npm run test:smoke
+npm run test:smoke:headed
+npm run test:auth
+npm run test:regression
 npm run test:allure
 npm run lint
 npm run typecheck
 npm run list
+```
+
+## Теги и профили запуска
+
+- `@smoke` — быстрый критичный набор для PR и локальной проверки
+- `@regression` — полный текущий UI-набор
+- `@auth` — все сценарии, связанные с логином, регистрацией, logout и удалением аккаунта
+
+Примеры:
+
+```bash
+npm run test:smoke
+npm run test:auth
+npm run test:regression
 ```
 
 ## Локальная отладка
@@ -75,8 +93,9 @@ Workflow [`.github/workflows/ci.yml`](./.github/workflows/ci.yml):
 
 - запускается при `push` и `pull_request` в `master`
 - запускается по расписанию каждый день в 12:00 по Москве
-- прогоняет тесты CodeceptJS в headless-режиме
+- на `pull_request` гоняет быстрый `smoke`-профиль
+- на `pull_request`, `push` в `master` и по расписанию гоняет полный `regression`-профиль
 - сохраняет артефакты при падениях
-- генерирует и публикует Allure-отчет на GitHub Pages
+- для полного прогона генерирует и публикует Allure-отчет на GitHub Pages
 
 Последний опубликованный отчет: [borbkin.github.io/e2e-codecept](https://borbkin.github.io/e2e-codecept/)

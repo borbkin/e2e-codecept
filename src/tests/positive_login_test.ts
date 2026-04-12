@@ -10,7 +10,7 @@ Before(async ({ I }) => {
   await I.registerNewUser(userData);
 });
 
-Scenario('Позитивный вход по email и паролю', async ({ I }) => {
+Scenario('Позитивный вход по email и паролю @smoke @regression @auth', async ({ I }) => {
   await I.amOnPage(LoginPage.url);
   await I.acceptCookiesIfVisible();
 

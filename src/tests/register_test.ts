@@ -10,7 +10,7 @@ Before(() => {
   userData = buildTestUser();
 });
 
-Scenario('Пользователь может зарегистрироваться через UI', async ({ I }) => {
+Scenario('Пользователь может зарегистрироваться через UI @smoke @regression @auth', async ({ I }) => {
   await I.amOnPage(LoginPage.url);
   await I.acceptCookiesIfVisible();
 

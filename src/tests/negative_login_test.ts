@@ -3,12 +3,12 @@ import { buildTestUser } from '../utils/testUser';
 
 Feature('Login page');
 
-Scenario('Открытие страницы логина', async ({ I }) => {
+Scenario('Открытие страницы логина @regression @auth', async ({ I }) => {
   await I.amOnPage(LoginPage.url);
   await I.see(LoginPage.loginTitle);
 });
 
-Scenario('Негативный вход по email и паролю', async ({ I }) => {
+Scenario('Негативный вход по email и паролю @regression @auth', async ({ I }) => {
   const invalidUserData = buildTestUser();
 
   await I.amOnPage(LoginPage.url);
