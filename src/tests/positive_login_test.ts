@@ -1,4 +1,4 @@
-import { LoginPage } from '../pages/LoginPage';
+import { loginThroughUi, openAuthPage } from '../helpers/authFlow';
 import { buildTestUser, TestUser } from '../utils/testUser';
 
 Feature('Login page');
@@ -11,15 +11,8 @@ Before(async ({ I }) => {
 });
 
 Scenario('Позитивный вход по email и паролю @smoke @regression @auth', async ({ I }) => {
-  await I.amOnPage(LoginPage.url);
-  await I.acceptCookiesIfVisible();
-
-  await I.fillField(LoginPage.emailField, userData.email);
-  await I.fillField(LoginPage.passwordField, userData.password);
-  await I.click(LoginPage.submitButton);
-
-  await I.waitForText('Logged in as', 10);
-  await I.see(LoginPage.loggedInText(userData.name));
+  await openAuthPage(I);
+  await loginThroughUi(I, userData);
 });
 
 After(async ({ I }) => {

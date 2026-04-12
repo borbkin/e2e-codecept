@@ -1,24 +1,28 @@
+import { AuthForm } from '../fragments/AuthForm';
+import { Header } from '../fragments/Header';
+import { AccountConfirmation } from '../fragments/AccountConfirmation';
+
 export const LoginPage = {
   url: '/login',
-  signupOrLoginLink: 'Signup / Login',
-  signupName: '[data-qa="signup-name"]',
-  signupEmail: '[data-qa="signup-email"]',
-  signupButton: '[data-qa="signup-button"]',
-  emailField: '[data-qa="login-email"]',
-  passwordField: '[data-qa="login-password"]',
-  submitButton: '[data-qa="login-button"]',
-  loginForm: '.login-form',
-  signupForm: '.signup-form',
-  loggedInText: (name: string) => `Logged in as ${name}`,
-  loginTitle: 'Login to your account',
-  duplicateEmailError: 'Email Address already exist!',
+  signupName: AuthForm.signupNameField,
+  signupEmail: AuthForm.signupEmailField,
+  signupButton: AuthForm.signupButton,
+  emailField: AuthForm.loginEmailField,
+  passwordField: AuthForm.loginPasswordField,
+  submitButton: AuthForm.loginSubmitButton,
+  loginForm: AuthForm.loginForm,
+  signupForm: AuthForm.signupForm,
+  loginTitle: AuthForm.loginTitle,
+  duplicateEmailError: AuthForm.duplicateEmailError,
   createAccountPassword: '#password',
   createButton: '[data-qa="create-account"]',
-  continueButton: '[data-qa="continue-button"]',
-  logoutLink: 'Logout',
-  deleteAccountLink: 'Delete Account',
-  deleteAccountLinkSelector: 'a[href="/delete_account"]',
-  accountCreatedMessage: 'Account Created!',
-  accountDeletedBanner: '[data-qa="account-deleted"]',
-  accountDeletedMessage: 'ACCOUNT DELETED!'
+  continueButton: AccountConfirmation.continueButton,
+  signupOrLoginLink: Header.signupOrLoginLink,
+  loggedInText: Header.loggedInText,
+  logoutLink: Header.logoutLink,
+  deleteAccountLink: Header.deleteAccountLink,
+  deleteAccountLinkSelector: Header.deleteAccountLinkSelector,
+  accountCreatedMessage: AccountConfirmation.accountCreatedMessage,
+  accountDeletedBanner: AccountConfirmation.accountDeletedBanner,
+  accountDeletedMessage: AccountConfirmation.accountDeletedMessage
 };

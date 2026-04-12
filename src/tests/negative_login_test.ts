@@ -1,23 +1,24 @@
-import { LoginPage } from '../pages/LoginPage';
+import { AuthForm } from '../fragments/AuthForm';
+import { Header } from '../fragments/Header';
+import { openAuthPage } from '../helpers/authFlow';
 import { buildTestUser } from '../utils/testUser';
 
 Feature('Login page');
 
 Scenario('Открытие страницы логина @regression @auth', async ({ I }) => {
-  await I.amOnPage(LoginPage.url);
-  await I.see(LoginPage.loginTitle);
+  await I.amOnPage('/login');
+  await I.see(AuthForm.loginTitle);
 });
 
 Scenario('Негативный вход по email и паролю @regression @auth', async ({ I }) => {
   const invalidUserData = buildTestUser();
 
-  await I.amOnPage(LoginPage.url);
-  await I.acceptCookiesIfVisible();
+  await openAuthPage(I);
 
-  await I.fillField(LoginPage.emailField, invalidUserData.email);
-  await I.fillField(LoginPage.passwordField, invalidUserData.password);
-  await I.click(LoginPage.submitButton);
+  await I.fillField(AuthForm.loginEmailField, invalidUserData.email);
+  await I.fillField(AuthForm.loginPasswordField, invalidUserData.password);
+  await I.click(AuthForm.loginSubmitButton);
 
-  await I.waitForText('Your email or password is incorrect!', 5, '.login-form');
-  await I.dontSee(LoginPage.loggedInText(invalidUserData.name));
+  await I.waitForText('Your email or password is incorrect!', 5, AuthForm.loginForm);
+  await I.dontSee(Header.loggedInText(invalidUserData.name));
 });
