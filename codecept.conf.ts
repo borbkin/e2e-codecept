@@ -20,6 +20,9 @@ export const config: CodeceptJS.MainConfig = {
       waitForNavigation: 'domcontentloaded',
       url: 'https://automationexercise.com',
       show: process.env.HEADLESS !== 'true',
+    },
+    NetworkIsolation: {
+      require: './src/helpers/NetworkIsolation.ts'
     }
   },
   include: {
