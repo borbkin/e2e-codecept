@@ -93,6 +93,14 @@ npx codeceptjs run src/tests/positive_login_test.ts
 
 ## CI
 
+Auth-тесты блокируют только рекламные и опросные домены из CI HAR
+через `src/helpers/NetworkIsolation.ts` до открытия страниц. Это исключает
+Google-опросы и рекламные оверлеи из проверки авторизации; запросы сайта,
+API и загрузка шрифтов остаются настоящими. Проверка фильтра и его работы
+в браузере: `npm run test:network`.
+
+CI устанавливает только Chromium, используемый набором тестов.
+
 Workflow [`.github/workflows/ci.yml`](./.github/workflows/ci.yml):
 
 - запускается при `push` и `pull_request` в `master`

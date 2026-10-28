@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "E2E tests for automationexercise.com powered by CodeceptJS and Playwright",
   "scripts": {
+    "test:network": "node --test tests/network-isolation.test.cjs",
     "test": "npm run test:ui",
     "test:ui": "cross-env HEADLESS=true npx codeceptjs run --plugins allure --steps",
     "test:headed": "cross-env HEADLESS=false npx codeceptjs run --plugins allure --steps",

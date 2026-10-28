@@ -32,7 +32,7 @@ jobs:
         run: npm run typecheck
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps chromium
 
       - name: Run smoke suite
         run: npm run test:smoke
@@ -41,14 +41,14 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-traces
+          name: playwright-traces-smoke
           path: output/
       
       - name: Upload screenshots
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: screenshots
+          name: screenshots-smoke
           path: output/  # или ./output/screenshots, если хранятся в подпапке      
       
       - name: Add Playwright traces link to summary
@@ -85,7 +85,10 @@ jobs:
         run: npm run typecheck
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify network isolation
+        run: npm run test:network
 
       - name: Run regression suite
         run: npm run test:regression
