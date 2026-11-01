@@ -121,7 +121,8 @@ Workflow [`.github/workflows/ci.yml`](./.github/workflows/ci.yml):
 - полный `regression`-профиль, проверки сети и надежности запускаются на каждом событии workflow
 - использует Node.js 24 и npm cache
 - при падениях сохраняет Playwright output; для pull request также загружает Allure-отчет отдельным artifact
-- публикует Allure-отчет на GitHub Pages только для push, расписания или ручного запуска на доверенном `master`; pull request не заменяет опубликованный отчет
+- публикует Allure-отчет в `gh-pages` только для push, расписания или ручного запуска на доверенном `master`; pull request не заменяет опубликованный отчет
+- публикует отчет и после неуспешного regression-прогона, если отчет был создан; при отсутствии результатов публикация пропускается
 - новые pull request запуски отменяют устаревшие запуски того же pull request; push и запуски по расписанию выполняются независимо
 
 Последний опубликованный отчет: [borbkin.github.io/e2e-codecept](https://borbkin.github.io/e2e-codecept/)
