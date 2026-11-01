@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { buildURL } from '../config/environment';
 import { TestUser } from '../utils/testUser';
+import { buildURL } from '../config/environment';
 
 const API_URL = buildURL('api').replace(/\/$/, '');
 const API_TIMEOUT_MS = Number(process.env.API_TIMEOUT_MS ?? 30_000);

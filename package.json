@@ -5,7 +5,6 @@
   "scripts": {
     "test:reliability": "node --test tests/reliability.test.cjs",
     "test:network": "node --test tests/network-isolation.test.cjs",
-    "test:config": "node tests/environment.test.cjs",
     "test": "npm run test:ui",
     "test:ui": "cross-env HEADLESS=true npx codeceptjs run --plugins allure --steps",
     "test:headed": "cross-env HEADLESS=false npx codeceptjs run --plugins allure --steps",
@@ -15,13 +14,14 @@
     "test:mobile:headed": "cross-env TEST_PROFILE=mobile HEADLESS=false npx codeceptjs run -c codecept.mobile.conf.ts --plugins allure --steps --grep \"@smoke\"",
     "test:auth": "cross-env HEADLESS=true npx codeceptjs run --plugins allure --steps --grep \"@auth\"",
     "test:auth:headed": "cross-env HEADLESS=false npx codeceptjs run --plugins allure --steps --grep \"@auth\"",
+    "test:config": "node tests/environment.test.cjs",
+    "list:mobile": "cross-env TEST_PROFILE=mobile HEADLESS=true npx codeceptjs dry-run -c codecept.mobile.conf.ts --grep \"@smoke\"",
     "test:regression": "cross-env HEADLESS=true npx codeceptjs run --plugins allure --steps --grep \"@regression\"",
     "test:regression:headed": "cross-env HEADLESS=false npx codeceptjs run --plugins allure --steps --grep \"@regression\"",
     "test:allure": "npx allure generate allure-results --clean -o allure-report",
     "typecheck": "npx tsc --noEmit",
     "lint": "npx eslint . --ext .ts",
-    "list": "npx codeceptjs list",
-    "list:mobile": "cross-env TEST_PROFILE=mobile HEADLESS=true npx codeceptjs dry-run -c codecept.mobile.conf.ts --grep \"@smoke\""
+    "list": "npx codeceptjs list"
   },
   "repository": {
     "type": "git",

@@ -57,28 +57,6 @@ npm run typecheck
 npm run list
 ```
 
-## Профили окружения
-
-`TEST_PROFILE` выбирает профиль `local`, `ci` или `mobile`. Без значения
-используется `ci`, если `CI=true`, иначе `local`. `local` запускается в headed
-режиме, `ci` и `mobile` — headless; явный `HEADLESS=true` или `HEADLESS=false`
-имеет приоритет в любом профиле. `BASE_URL` задаёт адрес сайта (по умолчанию
-`https://automationexercise.com`) и может включать путь, например
-`https://test.example/shop/`. API, навигация и ожидания URL используют этот адрес.
-
-| Профиль | Браузер | Эмуляция | Запуск |
-| --- | --- | --- | --- |
-| `local` | Chromium | Окно 1200×900 | `npm run test:headed` |
-| `ci` | Chromium | Нет | `npm test` |
-| `mobile` | Chromium | Playwright Pixel 7, touch | `npm run test:mobile` |
-
-`npm run test:mobile:headed` открывает эмуляцию Pixel 7 в headed режиме.
-Устройство можно переопределить через `MOBILE_DEVICE`, указав имя известного
-Playwright устройства с Chromium и мобильной touch-эмуляцией. Это эмуляция
-Chromium, а не запуск Safari. `npm run list:mobile` показывает выбранные тесты
-без обращения к сайту. Проверки парсера и конфигурации также офлайн:
-`npm run test:config`.
-
 ## Теги и профили запуска
 
 - `@smoke` — быстрый критичный набор для PR и локальной проверки
@@ -113,6 +91,32 @@ PWDEBUG=1 npx codeceptjs run --plugins allure --steps
 npx codeceptjs run src/tests/positive_login_test.ts
 ```
 
+## Профили окружения
+
+`TEST_PROFILE` выбирает профиль `local`, `ci` или `mobile`. Без значения
+используется `ci`, если `CI=true`, иначе `local`. `local` запускается в headed
+режиме, `ci` и `mobile` — headless; явный `HEADLESS=true` или `HEADLESS=false`
+имеет приоритет в любом профиле. `BASE_URL` задаёт адрес сайта (по умолчанию
+`https://automationexercise.com`) и может включать путь, например
+`https://test.example/shop/`. API, навигация и ожидания URL используют этот адрес.
+
+| Профиль | Браузер | Эмуляция | Запуск |
+| --- | --- | --- | --- |
+| `local` | Chromium | Окно 1200×900 | `npm run test:headed` |
+| `ci` | Chromium | Нет | `npm test` |
+| `mobile` | Chromium | Playwright Pixel 7, touch | `npm run test:mobile` |
+
+`npm run test:mobile:headed` открывает эмуляцию Pixel 7 в headed режиме.
+Устройство можно переопределить через `MOBILE_DEVICE`, указав имя известного
+Playwright устройства с Chromium и мобильной touch-эмуляцией. Это эмуляция
+Chromium, а не запуск Safari. `npm run list:mobile` показывает выбранные тесты
+без обращения к сайту. Проверки парсера и конфигурации также офлайн:
+`npm run test:config`.
+
+Мобильный smoke также запускается в CI заданием `mobile` после успешного
+полного desktop-прогона. Диагностические артефакты имеют отдельное имя
+`playwright-output-mobile`; глобальный Allure-отчёт остаётся desktop-отчётом.
+
 ## CI
 
 Auth-тесты блокируют только рекламные и опросные домены из CI HAR
@@ -144,7 +148,3 @@ Workflow [`.github/workflows/ci.yml`](./.github/workflows/ci.yml):
 - для полного прогона генерирует и публикует Allure-отчет на GitHub Pages
 
 Последний опубликованный отчет: [borbkin.github.io/e2e-codecept](https://borbkin.github.io/e2e-codecept/)
-
-Мобильный smoke также запускается в CI заданием `mobile` после успешного
-полного desktop-прогона. Диагностические артефакты имеют отдельное имя
-`playwright-output-mobile`; глобальный Allure-отчёт остаётся desktop-отчётом.
