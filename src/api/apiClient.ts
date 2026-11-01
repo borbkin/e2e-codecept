@@ -1,7 +1,7 @@
 import axios from 'axios';
+import { buildURL } from '../config/environment';
 import { TestUser } from '../utils/testUser';
 
-const API_URL = 'https://automationexercise.com/api';
 const API_TIMEOUT_MS = Number(process.env.API_TIMEOUT_MS ?? 30_000);
 
 export async function createUserViaAPI(user: TestUser) {
@@ -22,7 +22,7 @@ export async function createUserViaAPI(user: TestUser) {
   formData.append('zipcode', user.zipcode);
   formData.append('mobile_number', user.mobileNumber);
 
-  const response = await axios.post(`${API_URL}/createAccount`, formData.toString(), {
+  const response = await axios.post(buildURL('api/createAccount'), formData.toString(), {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     timeout: API_TIMEOUT_MS
   });
@@ -40,7 +40,7 @@ export async function deleteUserViaAPI(data: {
   formData.append('email', data.email);
   formData.append('password', data.password);
 
-  const response = await axios.delete(`${API_URL}/deleteAccount`, {
+  const response = await axios.delete(buildURL('api/deleteAccount'), {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     data: formData.toString(),
     timeout: API_TIMEOUT_MS

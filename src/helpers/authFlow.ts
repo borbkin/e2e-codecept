@@ -5,10 +5,11 @@ import { LoginPage } from '../pages/LoginPage';
 import { RegistrationPage } from '../pages/RegistrationPage';
 import { TestUser } from '../utils/testUser';
 import { openPageWithOverloadRetry } from './navigation';
+import { buildURL } from '../config/environment';
 
 export async function openAuthPage(I: CodeceptJS.I) {
   await I.usePlaywrightTo('открыть страницу авторизации с проверкой HTTP-статуса', async ({ page }) => {
-    await openPageWithOverloadRetry(page, `https://automationexercise.com${LoginPage.url}`);
+    await openPageWithOverloadRetry(page, buildURL(LoginPage.url));
   });
   await I.waitForElement(AuthForm.loginEmailField, 10);
   await I.acceptCookiesIfVisible();
@@ -18,7 +19,7 @@ export async function loginThroughUi(I: CodeceptJS.I, user: Pick<TestUser, 'emai
   await I.fillField(AuthForm.loginEmailField, user.email);
   await I.fillField(AuthForm.loginPasswordField, user.password);
   await I.click(AuthForm.loginSubmitButton, undefined, { noWaitAfter: true });
-  await I.waitForURL('https://automationexercise.com/');
+  await I.waitForURL(buildURL('/'));
   await assertLoggedIn(I, user.name);
 }
 
@@ -53,7 +54,7 @@ export async function completeRegistrationForm(I: CodeceptJS.I, user: TestUser) 
 export async function completeAccountConfirmation(I: CodeceptJS.I) {
   await I.waitForText(AccountConfirmation.accountCreatedMessage, 10);
   await I.click(AccountConfirmation.continueButton, undefined, { noWaitAfter: true });
-  await I.waitForURL('https://automationexercise.com/');
+  await I.waitForURL(buildURL('/'));
 }
 
 export async function assertLoggedOut(I: CodeceptJS.I) {
@@ -79,7 +80,7 @@ export async function deleteAccountThroughUi(I: CodeceptJS.I) {
   await I.see(AccountConfirmation.accountDeletedMessage, AccountConfirmation.accountDeletedBanner);
   await I.waitForElement(AccountConfirmation.continueButton, 10);
   await I.click(AccountConfirmation.continueButton, undefined, { noWaitAfter: true });
-  await I.waitForURL('https://automationexercise.com/');
+  await I.waitForURL(buildURL('/'));
   await I.waitForText(Header.signupOrLoginLink, 10);
   await I.see(Header.signupOrLoginLink);
 }
