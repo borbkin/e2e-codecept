@@ -9,14 +9,17 @@ const root = path.resolve(__dirname, '..');
 
 // Execute the real feature through CodeceptJS, with failed browser steps and a
 // local Axios adapter. This exercises After/recorder behavior without the site.
-for (const cleanupFails of [false, true]) {
-  test(`UI failure survives teardown (cleanup fails: ${cleanupFails})`, async () => {
+const cases = ['register', 'positive_login'].flatMap(feature =>
+  [false, true].map(cleanupFails => ({ feature, cleanupFails })));
+for (const { feature, cleanupFails } of cases) {
+  test(`${feature} failure survives teardown (cleanup fails: ${cleanupFails})`, async () => {
     const dir = await mkdtemp(path.join(tmpdir(), 'e2e-cleanup-'));
     const marker = path.join(dir, 'cleanup.json');
     try {
       await writeFile(path.join(dir, 'actor.cjs'), `
 module.exports = () => actor({
   usePlaywrightTo() { throw new Error('primary-ui-failure'); },
+  registerNewUser() { throw new Error('primary-setup-failure'); },
   logout() { throw new Error('logout-must-not-run'); }
 });
 `);
@@ -28,7 +31,7 @@ axios.defaults.adapter = async config => {
   return { data: { responseCode: ${cleanupFails ? 500 : 200}, message: 'cleanup-result' }, status: 200, statusText: 'OK', headers: {}, config };
 };
 exports.config = {
-  tests: ${JSON.stringify(path.join(root, 'src/tests/register_test.ts'))},
+  tests: ${JSON.stringify(path.join(root, `src/tests/${feature}_test.ts`))},
   output: ${JSON.stringify(path.join(dir, 'output'))},
   helpers: {},
   include: { I: ${JSON.stringify(path.join(dir, 'actor.cjs'))} },
@@ -47,7 +50,7 @@ exports.config = {
       }
       assert.ok(failure, 'The intentional UI failure must fail the run');
       const output = `${failure.stdout}\n${failure.stderr}`;
-      assert.match(output, /primary-ui-failure/);
+      assert.match(output, feature === 'register' ? /primary-ui-failure/ : /primary-setup-failure/);
       assert.doesNotMatch(output, /logout-must-not-run/);
       const request = JSON.parse(await readFile(marker, 'utf8'));
       assert.equal(request.method, 'delete');

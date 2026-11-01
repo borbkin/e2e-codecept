@@ -93,6 +93,9 @@ jobs:
       - name: Verify auth reliability
         run: npm run test:reliability
 
+      - name: Verify API helper contracts
+        run: npm run test:api
+
       - name: Verify account cleanup
         run: npm run test:cleanup
 
