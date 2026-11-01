@@ -6,7 +6,7 @@ import { buildTestUser } from '../utils/testUser';
 Feature('Login page');
 
 Scenario('Открытие страницы логина @regression @auth', async ({ I }) => {
-  await I.amOnPage('/login');
+  await openAuthPage(I);
   await I.see(AuthForm.loginTitle);
 });
 
@@ -17,7 +17,7 @@ Scenario('Негативный вход по email и паролю @regression @
 
   await I.fillField(AuthForm.loginEmailField, invalidUserData.email);
   await I.fillField(AuthForm.loginPasswordField, invalidUserData.password);
-  await I.click(AuthForm.loginSubmitButton);
+  await I.click(AuthForm.loginSubmitButton, undefined, { noWaitAfter: true });
 
   await I.waitForText('Your email or password is incorrect!', 5, AuthForm.loginForm);
   await I.dontSee(Header.loggedInText(invalidUserData.name));

@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { faker } from '@faker-js/faker';
 import { buildTestAddress } from './testData';
 
@@ -26,7 +27,7 @@ export function buildTestUser(overrides: Partial<TestUser> = {}): TestUser {
 
   return {
     name: `${firstName} ${lastName}`,
-    email: faker.internet.email({ firstName, lastName }).toLowerCase(),
+    email: `e2e-${randomUUID()}@example.com`,
     password: faker.internet.password({ length: 10, memorable: false }),
     title: 'Mr',
     birthDay: '3',

@@ -4,16 +4,21 @@ import { AccountConfirmation } from '../fragments/AccountConfirmation';
 import { LoginPage } from '../pages/LoginPage';
 import { RegistrationPage } from '../pages/RegistrationPage';
 import { TestUser } from '../utils/testUser';
+import { openPageWithOverloadRetry } from './navigation';
 
 export async function openAuthPage(I: CodeceptJS.I) {
-  await I.amOnPage(LoginPage.url);
+  await I.usePlaywrightTo('открыть страницу авторизации с проверкой HTTP-статуса', async ({ page }) => {
+    await openPageWithOverloadRetry(page, `https://automationexercise.com${LoginPage.url}`);
+  });
+  await I.waitForElement(AuthForm.loginEmailField, 10);
   await I.acceptCookiesIfVisible();
 }
 
 export async function loginThroughUi(I: CodeceptJS.I, user: Pick<TestUser, 'email' | 'password' | 'name'>) {
   await I.fillField(AuthForm.loginEmailField, user.email);
   await I.fillField(AuthForm.loginPasswordField, user.password);
-  await I.click(AuthForm.loginSubmitButton);
+  await I.click(AuthForm.loginSubmitButton, undefined, { noWaitAfter: true });
+  await I.waitForURL('https://automationexercise.com/');
   await assertLoggedIn(I, user.name);
 }
 
@@ -25,7 +30,7 @@ export async function assertLoggedIn(I: CodeceptJS.I, name: string) {
 export async function submitSignupForm(I: CodeceptJS.I, user: Pick<TestUser, 'name' | 'email'>) {
   await I.fillField(AuthForm.signupNameField, user.name);
   await I.fillField(AuthForm.signupEmailField, user.email);
-  await I.click(AuthForm.signupButton);
+  await I.click(AuthForm.signupButton, undefined, { noWaitAfter: true });
 }
 
 export async function completeRegistrationForm(I: CodeceptJS.I, user: TestUser) {
@@ -42,15 +47,17 @@ export async function completeRegistrationForm(I: CodeceptJS.I, user: TestUser) 
   await I.fillField(RegistrationPage.cityField, user.city);
   await I.fillField(RegistrationPage.zipcodeField, user.zipcode);
   await I.fillField(RegistrationPage.mobileField, user.mobileNumber);
-  await I.click(RegistrationPage.createAccountButton);
+  await I.click(RegistrationPage.createAccountButton, undefined, { noWaitAfter: true });
 }
 
 export async function completeAccountConfirmation(I: CodeceptJS.I) {
   await I.waitForText(AccountConfirmation.accountCreatedMessage, 10);
-  await I.click(AccountConfirmation.continueButton);
+  await I.click(AccountConfirmation.continueButton, undefined, { noWaitAfter: true });
+  await I.waitForURL('https://automationexercise.com/');
 }
 
 export async function assertLoggedOut(I: CodeceptJS.I) {
+  await I.waitForText(AuthForm.loginTitle, 10, AuthForm.loginForm);
   await I.see(AuthForm.loginTitle, AuthForm.loginForm);
 }
 
@@ -63,14 +70,16 @@ export async function deleteAccountThroughUi(I: CodeceptJS.I) {
     await deleteAccountLink.waitFor({ state: 'visible', timeout: 10000 });
     await deleteAccountLink.scrollIntoViewIfNeeded();
     await Promise.all([
-      page.waitForURL(/\/delete_account(?:[/?#]|$)/, { timeout: 20000 }),
-      deleteAccountLink.click({ force: true })
+      page.waitForURL(/\/delete_account(?:[/?#]|$)/, { timeout: 20000, waitUntil: 'commit' }),
+      deleteAccountLink.click({ noWaitAfter: true })
     ]);
   });
 
   await I.waitForElement(AccountConfirmation.accountDeletedBanner, 20);
   await I.see(AccountConfirmation.accountDeletedMessage, AccountConfirmation.accountDeletedBanner);
   await I.waitForElement(AccountConfirmation.continueButton, 10);
-  await I.click(AccountConfirmation.continueButton);
+  await I.click(AccountConfirmation.continueButton, undefined, { noWaitAfter: true });
+  await I.waitForURL('https://automationexercise.com/');
+  await I.waitForText(Header.signupOrLoginLink, 10);
   await I.see(Header.signupOrLoginLink);
 }
