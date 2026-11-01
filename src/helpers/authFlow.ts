@@ -4,9 +4,12 @@ import { AccountConfirmation } from '../fragments/AccountConfirmation';
 import { LoginPage } from '../pages/LoginPage';
 import { RegistrationPage } from '../pages/RegistrationPage';
 import { TestUser } from '../utils/testUser';
+import { openPageWithOverloadRetry } from './navigation';
 
 export async function openAuthPage(I: CodeceptJS.I) {
-  await I.amOnPage(LoginPage.url);
+  await I.usePlaywrightTo('открыть страницу авторизации с проверкой HTTP-статуса', async ({ page }) => {
+    await openPageWithOverloadRetry(page, `https://automationexercise.com${LoginPage.url}`);
+  });
   await I.waitForElement(AuthForm.loginEmailField, 10);
   await I.acceptCookiesIfVisible();
 }

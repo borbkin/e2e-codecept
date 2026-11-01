@@ -90,6 +90,9 @@ jobs:
       - name: Verify network isolation
         run: npm run test:network
 
+      - name: Verify auth reliability
+        run: npm run test:reliability
+
       - name: Run regression suite
         run: npm run test:regression
 
