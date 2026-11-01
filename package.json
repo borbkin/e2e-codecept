@@ -9,6 +9,7 @@
     "test:api": "node tests/api-client.test.cjs",
     "test": "npm run test:ui",
     "test:ui": "cross-env HEADLESS=true npx codeceptjs run --plugins allure --steps",
+    "test:lifecycle": "node tests/suite-hooks.test.cjs",
     "test:headed": "cross-env HEADLESS=false npx codeceptjs run --plugins allure --steps",
     "test:smoke": "cross-env HEADLESS=true npx codeceptjs run --plugins allure --steps --grep \"@smoke\"",
     "test:smoke:headed": "cross-env HEADLESS=false npx codeceptjs run --plugins allure --steps --grep \"@smoke\"",
@@ -19,7 +20,7 @@
     "test:allure": "npx allure generate allure-results --clean -o allure-report",
     "typecheck": "npx tsc --noEmit",
     "lint": "npx eslint . --ext .ts",
-    "list": "npx codeceptjs list"
+    "list": "npx codeceptjs dry-run"
   },
   "repository": {
     "type": "git",
