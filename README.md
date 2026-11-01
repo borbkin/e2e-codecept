@@ -103,7 +103,7 @@ npx codeceptjs run src/tests/positive_login_test.ts
 | Профиль | Браузер | Эмуляция | Запуск |
 | --- | --- | --- | --- |
 | `local` | Chromium | Окно 1200×900 | `npm run test:headed` |
-| `ci` | Chromium | Нет | `npm test` |
+| `ci` | Chromium | Нет | `npx cross-env TEST_PROFILE=ci npm test` |
 | `mobile` | Chromium | Playwright Pixel 7, touch | `npm run test:mobile` |
 
 `npm run test:mobile:headed` открывает эмуляцию Pixel 7 в headed режиме.
