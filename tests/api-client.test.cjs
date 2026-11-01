@@ -28,6 +28,7 @@ const user = {
   zipcode: '10001',
   mobileNumber: '+1 555-123-4567'
 };
+const expectedTimeout = Number(process.env.API_TIMEOUT_MS ?? 30_000);
 
 function clientFor(responseOrError, requests = []) {
   return axios.create({
@@ -53,7 +54,7 @@ test('create posts correctly encoded account fields with a bounded timeout', asy
   assert.equal(request.method, 'post');
   assert.equal(request.url, 'http://offline.test/api/createAccount');
   assert.equal(request.headers['Content-Type'], 'application/x-www-form-urlencoded');
-  assert.ok(request.timeout > 0 && request.timeout <= 30_000);
+  assert.equal(request.timeout, expectedTimeout);
   assert.deepEqual(Object.fromEntries(new URLSearchParams(request.data)), {
     name: user.name,
     email: user.email,
@@ -86,7 +87,7 @@ test('delete sends encoded credentials and accepts cleanup response codes 200 an
     assert.equal(request.method, 'delete');
     assert.equal(request.url, 'http://offline.test/api/deleteAccount');
     assert.equal(request.headers['Content-Type'], 'application/x-www-form-urlencoded');
-    assert.ok(request.timeout > 0 && request.timeout <= 30_000);
+    assert.equal(request.timeout, expectedTimeout);
     assert.deepEqual(Object.fromEntries(new URLSearchParams(request.data)), {
       email: user.email,
       password: user.password
@@ -98,7 +99,9 @@ test('business error codes and missing or malformed payloads reject', async (t) 
   const createErrors = [
     { responseCode: 400, message: 'Email already exists' },
     {},
-    null
+    null,
+    'malformed response',
+    { responseCode: '201' }
   ];
   for (const payload of createErrors) {
     await t.test(`create rejects ${JSON.stringify(payload)}`, async () => {
@@ -109,7 +112,9 @@ test('business error codes and missing or malformed payloads reject', async (t) 
   for (const payload of [
     { responseCode: 403, message: 'Invalid credentials' },
     {},
-    null
+    null,
+    'malformed response',
+    { responseCode: '200' }
   ]) {
     await t.test(`delete rejects ${JSON.stringify(payload)}`, async () => {
       await assert.rejects(
