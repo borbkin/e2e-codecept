@@ -1,5 +1,6 @@
 import { AuthForm } from '../fragments/AuthForm';
 import { Header } from '../fragments/Header';
+import { deleteUserViaAPI } from '../api/apiClient';
 import { openAuthPage } from '../helpers/authFlow';
 import { buildTestUser, TestUser } from '../utils/testUser';
 
@@ -74,6 +75,6 @@ Scenario('Вход с неверным паролем существующего
   await I.dontSee(Header.loggedInText(registeredUser.name));
 });
 
-After(async ({ I }) => {
-  await I.deleteTestUser(registeredUser.email, registeredUser.password);
+After(async () => {
+  await deleteUserViaAPI(registeredUser);
 });
