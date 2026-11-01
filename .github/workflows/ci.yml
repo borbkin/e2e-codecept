@@ -126,19 +126,10 @@ jobs:
           echo "Failure artifacts are attached to this run. Open a trace at https://trace.playwright.dev." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Add Allure report to summary
-        if: always() && hashFiles('allure-report/**') != ''
-        env:
-          GH_REPOSITORY: ${{ github.repository }}
-          GH_EVENT_NAME: ${{ github.event_name }}
-          GH_REF: ${{ github.ref }}
+        if: always() && steps.upload-allure.outcome == 'success'
         run: |
-          if [[ "$GH_EVENT_NAME" == "pull_request" ]]; then
-            echo "### Allure report" >> "$GITHUB_STEP_SUMMARY"
-            echo 'Download the `allure-report` artifact from this run to view the report.' >> "$GITHUB_STEP_SUMMARY"
-          elif [[ "$GH_REPOSITORY" == "borbkin/e2e-codecept" && "$GH_REF" == "refs/heads/master" ]]; then
-            echo "### Allure report" >> "$GITHUB_STEP_SUMMARY"
-            echo "[Open the published report](https://borbkin.github.io/e2e-codecept/)" >> "$GITHUB_STEP_SUMMARY"
-          fi
+          echo "### Allure report" >> "$GITHUB_STEP_SUMMARY"
+          echo 'The `allure-report` artifact is attached to this run.' >> "$GITHUB_STEP_SUMMARY"
 
   deploy-pages:
     if: always() && needs.test.result != 'cancelled' && needs.test.outputs.report_available == 'true' && github.repository == 'borbkin/e2e-codecept' && github.ref == 'refs/heads/master' && (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
@@ -158,3 +149,8 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: allure-report
+
+      - name: Add published Allure report link to summary
+        run: |
+          echo "### Allure report published" >> "$GITHUB_STEP_SUMMARY"
+          echo "[Open the published report](https://borbkin.github.io/e2e-codecept/)" >> "$GITHUB_STEP_SUMMARY"
