@@ -144,3 +144,7 @@ Workflow [`.github/workflows/ci.yml`](./.github/workflows/ci.yml):
 - для полного прогона генерирует и публикует Allure-отчет на GitHub Pages
 
 Последний опубликованный отчет: [borbkin.github.io/e2e-codecept](https://borbkin.github.io/e2e-codecept/)
+
+Мобильный smoke также запускается в CI заданием `mobile` после успешного
+полного desktop-прогона. Диагностические артефакты имеют отдельное имя
+`playwright-output-mobile`; глобальный Allure-отчёт остаётся desktop-отчётом.
