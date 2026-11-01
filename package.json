@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "E2E tests for automationexercise.com powered by CodeceptJS and Playwright",
   "scripts": {
+    "test:cleanup": "node --test tests/cleanup.test.cjs",
     "test:reliability": "node --test tests/reliability.test.cjs",
     "test:network": "node --test tests/network-isolation.test.cjs",
     "test": "npm run test:ui",

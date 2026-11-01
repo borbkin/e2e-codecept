@@ -1,57 +1,58 @@
 import { AuthForm } from '../fragments/AuthForm';
 import { deleteAccountThroughUi, loginThroughUi, openAuthPage, submitSignupForm, assertLoggedOut } from '../helpers/authFlow';
-import { buildTestUser } from '../utils/testUser';
+import { deleteUserViaAPI } from '../api/apiClient';
+import { buildTestUser, TestUser } from '../utils/testUser';
 
 Feature('Auth smoke');
+
+let accountToClean: TestUser | undefined;
+
+Before(() => {
+  accountToClean = undefined;
+});
+
+// API teardown runs even when browser steps or account creation fail.
+After(async () => {
+  if (accountToClean) {
+    await deleteUserViaAPI(accountToClean);
+  }
+});
 
 Scenario('Пользователь может выйти из аккаунта @smoke @regression @auth', async ({ I }) => {
   const user = buildTestUser();
 
-  try {
-    await I.registerNewUser(user);
+  accountToClean = user;
+  await I.registerNewUser(user);
 
-    await openAuthPage(I);
-    await loginThroughUi(I, user);
+  await openAuthPage(I);
+  await loginThroughUi(I, user);
 
-    await I.logout();
-    await assertLoggedOut(I);
-  } finally {
-    await I.deleteTestUser(user.email, user.password);
-  }
+  await I.logout();
+  await assertLoggedOut(I);
 });
 
 Scenario('Пользователь видит ошибку при повторной регистрации с существующим email @regression @auth', async ({ I }) => {
   const user = buildTestUser();
 
-  try {
-    await I.registerNewUser(user);
+  accountToClean = user;
+  await I.registerNewUser(user);
 
-    await openAuthPage(I);
-    await submitSignupForm(I, user);
+  await openAuthPage(I);
+  await submitSignupForm(I, user);
 
-    await I.waitForText(AuthForm.duplicateEmailError, 10, AuthForm.signupForm);
-    await I.see(AuthForm.duplicateEmailError, AuthForm.signupForm);
-  } finally {
-    await I.deleteTestUser(user.email, user.password);
-  }
+  await I.waitForText(AuthForm.duplicateEmailError, 10, AuthForm.signupForm);
+  await I.see(AuthForm.duplicateEmailError, AuthForm.signupForm);
 });
 
 Scenario('Пользователь может удалить аккаунт через UI @smoke @regression @auth', async ({ I }) => {
   const user = buildTestUser();
-  let accountDeletedViaUi = false;
 
-  try {
-    await I.registerNewUser(user);
+  accountToClean = user;
+  await I.registerNewUser(user);
 
-    await openAuthPage(I);
-    await loginThroughUi(I, user);
-    await deleteAccountThroughUi(I);
-    accountDeletedViaUi = true;
-  } finally {
-    if (!accountDeletedViaUi) {
-      await I.deleteTestUser(user.email, user.password);
-    }
-  }
+  await openAuthPage(I);
+  await loginThroughUi(I, user);
+  await deleteAccountThroughUi(I);
 });
 
 Scenario('Форма логина валидирует обязательный пароль @regression @auth', async ({ I }) => {
