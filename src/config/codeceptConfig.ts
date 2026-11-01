@@ -11,7 +11,9 @@ export function createCodeceptConfig(environment: EnvironmentConfig = loadEnviro
       path: 'output/network.har'
     },
     waitForNavigation: 'commit',
-    url: environment.baseURL,
+    // CodeceptJS appends relative paths directly to helper.url. Keep the
+    // canonical BASE_URL slash in the environment parser, but trim it here.
+    url: environment.baseURL.replace(/\/$/, ''),
     show: !environment.headless
   };
 

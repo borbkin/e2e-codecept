@@ -1,6 +1,7 @@
 require('ts-node/register');
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
+const Playwright = require('codeceptjs/lib/helper/Playwright');
 const { createCodeceptConfig } = require('../src/config/codeceptConfig');
 const { buildURL, loadEnvironment, normalizeBaseURL } = require('../src/config/environment');
 
@@ -28,6 +29,37 @@ test('BASE_URL is validated, normalized, and joined with a configured base path'
   assert.throws(() => loadEnvironment({ BASE_URL: 'ftp://example.test' }), /Invalid BASE_URL/);
   assert.throws(() => loadEnvironment({ BASE_URL: 'https://example.test/path?query=1' }), /Query strings/);
   assert.throws(() => buildURL('https://other.test', env), /relative to BASE_URL/);
+});
+
+test('CodeceptJS joins relative paths correctly for origin and subpath base URLs', async () => {
+  async function resolvedByCodecept(baseURL, path) {
+    const helper = new Playwright({ url: baseURL, waitForAction: 0, waitForNavigation: 'commit' });
+    const visited = [];
+    helper.page = {
+      goto: async (url) => visited.push(url),
+      evaluate: async () => JSON.stringify({
+        navigationStart: 1,
+        responseEnd: 2,
+        domInteractive: 3,
+        domContentLoadedEventEnd: 4,
+        loadEventEnd: 5
+      })
+    };
+    await helper.amOnPage(path);
+    return visited[0];
+  }
+
+  const originConfig = createCodeceptConfig(loadEnvironment({ BASE_URL: 'https://example.test/' }));
+  const originBase = originConfig.helpers.Playwright.url;
+  assert.equal(originBase, 'https://example.test');
+  assert.equal(await resolvedByCodecept(originBase, '/'), 'https://example.test/');
+  assert.equal(await resolvedByCodecept(originBase, '/login'), 'https://example.test/login');
+
+  const subpathConfig = createCodeceptConfig(loadEnvironment({ BASE_URL: 'https://example.test/shop/' }));
+  const subpathBase = subpathConfig.helpers.Playwright.url;
+  assert.equal(subpathBase, 'https://example.test/shop');
+  assert.equal(await resolvedByCodecept(subpathBase, '/'), 'https://example.test/shop/');
+  assert.equal(await resolvedByCodecept(subpathBase, '/login'), 'https://example.test/shop/login');
 });
 
 test('invalid profile and HEADLESS values fail clearly', () => {

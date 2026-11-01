@@ -21,7 +21,7 @@
     "typecheck": "npx tsc --noEmit",
     "lint": "npx eslint . --ext .ts",
     "list": "npx codeceptjs list",
-    "list:mobile": "cross-env TEST_PROFILE=mobile HEADLESS=true CODECEPT_DRY_RUN=true npx codeceptjs dry-run -c codecept.mobile.conf.ts --plugins allure --steps --grep \"@smoke\""
+    "list:mobile": "cross-env TEST_PROFILE=mobile HEADLESS=true npx codeceptjs dry-run -c codecept.mobile.conf.ts --grep \"@smoke\""
   },
   "repository": {
     "type": "git",

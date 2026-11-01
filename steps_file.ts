@@ -42,7 +42,6 @@ export = function() {
 
     async registerNewUser(this: CodeceptJS.I, user: TestUser) {
       this.say('Создаём пользователя через API');
-      if (process.env.CODECEPT_DRY_RUN === 'true') return;
       await createUserViaAPI(user);
     },
 
@@ -79,7 +78,6 @@ export = function() {
 
     async deleteTestUser(this: CodeceptJS.I, email: string, password: string) {
       this.say(`Удаляем тестового пользователя ${email}`);
-      if (process.env.CODECEPT_DRY_RUN === 'true') return;
       await deleteUserViaAPI({ email, password });
     }
   });
