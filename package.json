@@ -17,7 +17,7 @@
     "test:allure": "npx allure generate allure-results --clean -o allure-report",
     "typecheck": "npx tsc --noEmit",
     "lint": "npx eslint . --ext .ts",
-    "list": "npx codeceptjs list"
+    "list": "npx codeceptjs dry-run"
   },
   "repository": {
     "type": "git",
