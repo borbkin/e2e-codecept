@@ -115,10 +115,13 @@ UUID, независимый от seed Faker, чтобы параллельны�
 Workflow [`.github/workflows/ci.yml`](./.github/workflows/ci.yml):
 
 - запускается при `push` и `pull_request` в `master`
+- его можно запустить вручную через `workflow_dispatch`; публикация при этом разрешена только для `master`
 - запускается по расписанию каждый день в 12:00 по Москве
 - на `pull_request` гоняет быстрый `smoke`-профиль
-- на `pull_request`, `push` в `master` и по расписанию гоняет полный `regression`-профиль
-- сохраняет артефакты при падениях
-- для полного прогона генерирует и публикует Allure-отчет на GitHub Pages
+- полный `regression`-профиль, проверки сети и надежности запускаются на каждом событии workflow
+- использует Node.js 24 и npm cache
+- при падениях сохраняет Playwright output; для pull request также загружает Allure-отчет отдельным artifact
+- публикует Allure-отчет на GitHub Pages только для push, расписания или ручного запуска на доверенном `master`; pull request не заменяет опубликованный отчет
+- новые pull request запуски отменяют устаревшие запуски того же pull request; push и запуски по расписанию выполняются независимо
 
 Последний опубликованный отчет: [borbkin.github.io/e2e-codecept](https://borbkin.github.io/e2e-codecept/)
