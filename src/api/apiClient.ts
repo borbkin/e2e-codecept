@@ -1,7 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
 import { TestUser } from '../utils/testUser';
+import { buildURL } from '../config/environment';
 
-const API_URL = 'https://automationexercise.com/api';
+const API_URL = buildURL('api').replace(/\/$/, '');
 const API_TIMEOUT_MS = Number(process.env.API_TIMEOUT_MS ?? 30_000);
 
 interface ApiClientOptions {

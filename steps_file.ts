@@ -3,6 +3,7 @@ import { LoginPage } from './src/pages/LoginPage';
 import { CookieBanner } from './src/fragments/CookieBanner';
 import { TestUser } from './src/utils/testUser';
 import { createUserViaAPI, deleteUserViaAPI } from './src/api/apiClient';
+import { buildURL } from './src/config/environment';
 
 const COOKIE_BANNER_TIMEOUT_MS = 5000;
 const LOGOUT_LINK_TIMEOUT_MS = 3000;
@@ -70,7 +71,7 @@ export = function() {
       }
 
       await this.click(LoginPage.logoutLink, undefined, { noWaitAfter: true });
-      await this.waitForURL('https://automationexercise.com/login');
+      await this.waitForURL(buildURL('/login'));
       await this.waitForText(LoginPage.loginTitle, 10);
       await this.see(LoginPage.loginTitle);
     },
