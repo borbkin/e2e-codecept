@@ -69,7 +69,9 @@ export = function() {
         return;
       }
 
-      await this.click(LoginPage.logoutLink);
+      await this.click(LoginPage.logoutLink, undefined, { noWaitAfter: true });
+      await this.waitForURL('https://automationexercise.com/login');
+      await this.waitForText(LoginPage.loginTitle, 10);
       await this.see(LoginPage.loginTitle);
     },
 

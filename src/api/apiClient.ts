@@ -2,7 +2,7 @@ import axios from 'axios';
 import { TestUser } from '../utils/testUser';
 
 const API_URL = 'https://automationexercise.com/api';
-const API_TIMEOUT_MS = Number(process.env.API_TIMEOUT_MS ?? 10_000);
+const API_TIMEOUT_MS = Number(process.env.API_TIMEOUT_MS ?? 30_000);
 
 export async function createUserViaAPI(user: TestUser) {
   const formData = new URLSearchParams();
@@ -46,7 +46,8 @@ export async function deleteUserViaAPI(data: {
     timeout: API_TIMEOUT_MS
   });
 
-  if (response.data?.responseCode !== 200) {
+  // Cleanup is idempotent: the UI may already have deleted the account.
+  if (response.data?.responseCode !== 200 && response.data?.responseCode !== 404) {
     throw new Error(
       `deleteUserViaAPI failed: responseCode=${response.data?.responseCode}, message=${response.data?.message}`
     );

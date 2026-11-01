@@ -17,7 +17,8 @@ export const config: CodeceptJS.MainConfig = {
         path: 'output/network.har' 
       },
       windowSize: '1200x900',
-      waitForNavigation: 'domcontentloaded',
+      // Auth assertions wait for the required UI; third-party resources must not gate navigation.
+      waitForNavigation: 'commit',
       url: 'https://automationexercise.com',
       show: process.env.HEADLESS !== 'true',
     },
