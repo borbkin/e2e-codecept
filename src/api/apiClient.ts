@@ -1,10 +1,17 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { TestUser } from '../utils/testUser';
 
 const API_URL = 'https://automationexercise.com/api';
 const API_TIMEOUT_MS = Number(process.env.API_TIMEOUT_MS ?? 30_000);
 
-export async function createUserViaAPI(user: TestUser) {
+interface ApiClientOptions {
+  client?: AxiosInstance;
+  baseURL?: string;
+}
+
+export async function createUserViaAPI(user: TestUser, options: ApiClientOptions = {}) {
+  const client = options.client ?? axios;
+  const baseURL = options.baseURL ?? API_URL;
   const formData = new URLSearchParams();
   formData.append('name', user.name);
   formData.append('email', user.email);
@@ -22,7 +29,7 @@ export async function createUserViaAPI(user: TestUser) {
   formData.append('zipcode', user.zipcode);
   formData.append('mobile_number', user.mobileNumber);
 
-  const response = await axios.post(`${API_URL}/createAccount`, formData.toString(), {
+  const response = await client.post(`${baseURL}/createAccount`, formData.toString(), {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     timeout: API_TIMEOUT_MS
   });
@@ -35,12 +42,14 @@ export async function createUserViaAPI(user: TestUser) {
 export async function deleteUserViaAPI(data: {
   email: string;
   password: string;
-}) {
+}, options: ApiClientOptions = {}) {
+  const client = options.client ?? axios;
+  const baseURL = options.baseURL ?? API_URL;
   const formData = new URLSearchParams();
   formData.append('email', data.email);
   formData.append('password', data.password);
 
-  const response = await axios.delete(`${API_URL}/deleteAccount`, {
+  const response = await client.delete(`${baseURL}/deleteAccount`, {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     data: formData.toString(),
     timeout: API_TIMEOUT_MS

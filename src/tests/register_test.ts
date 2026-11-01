@@ -1,3 +1,4 @@
+import { deleteUserViaAPI } from '../api/apiClient';
 import { assertLoggedIn, completeAccountConfirmation, completeRegistrationForm, openAuthPage, submitSignupForm } from '../helpers/authFlow';
 import { buildTestUser, TestUser } from '../utils/testUser';
 
@@ -17,8 +18,7 @@ Scenario('Пользователь может зарегистрироватьс
   await assertLoggedIn(I, userData.name);
 });
 
-After(async ({ I }) => {
-  // Удаляем тестового пользователя, если он был создан
-  await I.logout();
-  await I.deleteTestUser(userData.email, userData.password);
+// Browser contexts are discarded by CodeceptJS; cleanup must not depend on logout.
+After(async () => {
+  await deleteUserViaAPI(userData);
 });

@@ -55,6 +55,7 @@ npm run test:allure
 npm run lint
 npm run typecheck
 npm run list
+npm run test:api
 ```
 
 ## Теги и профили запуска
@@ -112,6 +113,9 @@ CI устанавливает только Chromium, используемый н
 UUID, независимый от seed Faker, чтобы параллельные запуски не делили аккаунты.
 Проверка этих случаев: `npm run test:reliability`.
 
+API helper contract tests run offline with a fake Axios adapter and never contact
+the external site: `npm run test:api`.
+
 Workflow [`.github/workflows/ci.yml`](./.github/workflows/ci.yml):
 
 - запускается при `push` и `pull_request` в `master`
@@ -122,3 +126,11 @@ Workflow [`.github/workflows/ci.yml`](./.github/workflows/ci.yml):
 - для полного прогона генерирует и публикует Allure-отчет на GitHub Pages
 
 Последний опубликованный отчет: [borbkin.github.io/e2e-codecept](https://borbkin.github.io/e2e-codecept/)
+
+## Очистка тестовых аккаунтов
+
+Удаление аккаунтов выполняется напрямую через API в `After`, независимо от состояния
+браузера и успешности logout. Ошибки удаления отображаются отдельной ошибкой hook,
+сохраняя исходное падение сценария. Уже удалённый аккаунт допускается при очистке.
+Локальная проверка этого поведения через CodeceptJS без внешнего сайта:
+`npm run test:cleanup`.

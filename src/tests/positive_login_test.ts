@@ -1,3 +1,4 @@
+import { deleteUserViaAPI } from '../api/apiClient';
 import { loginThroughUi, openAuthPage } from '../helpers/authFlow';
 import { buildTestUser, TestUser } from '../utils/testUser';
 
@@ -15,8 +16,7 @@ Scenario('Позитивный вход по email и паролю @smoke @regre
   await loginThroughUi(I, userData);
 });
 
-After(async ({ I }) => {
-  // Удаляем тестового пользователя, если он был создан
-  await I.logout();
-  await I.deleteTestUser(userData.email, userData.password);
+// Browser contexts are discarded by CodeceptJS; cleanup must not depend on logout.
+After(async () => {
+  await deleteUserViaAPI(userData);
 });
