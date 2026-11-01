@@ -1,7 +1,7 @@
 import { AuthForm } from '../fragments/AuthForm';
 import { Header } from '../fragments/Header';
 import { deleteUserViaAPI } from '../api/apiClient';
-import { openAuthPage } from '../helpers/authFlow';
+import { assertLoggedOut, loginThroughUi, openAuthPage } from '../helpers/authFlow';
 import { buildTestUser, TestUser } from '../utils/testUser';
 
 Feature('Login page');
@@ -73,6 +73,20 @@ Scenario('Вход с неверным паролем существующего
   await I.waitForText('Your email or password is incorrect!', 5, AuthForm.loginForm);
   await I.dontSee('Logged in as');
   await I.dontSee(Header.loggedInText(registeredUser.name));
+});
+
+Scenario('Выход сохраняется после повторного открытия страницы @regression @auth', async ({ I }) => {
+  await openAuthPage(I);
+  await loginThroughUi(I, registeredUser);
+
+  await I.logout();
+  await I.amOnPage('/');
+  await I.waitForText(Header.signupOrLoginLink, 10);
+  await I.dontSee('Logged in as');
+  await I.dontSee(Header.loggedInText(registeredUser.name));
+
+  await openAuthPage(I);
+  await assertLoggedOut(I);
 });
 
 After(async () => {
