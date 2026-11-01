@@ -55,6 +55,7 @@ npm run test:allure
 npm run lint
 npm run typecheck
 npm run list
+npm run test:api
 ```
 
 ## Теги и профили запуска
@@ -111,6 +112,9 @@ CI устанавливает только Chromium, используемый н
 приводят к падению; отправка форм не повторяется. Тестовые email используют
 UUID, независимый от seed Faker, чтобы параллельные запуски не делили аккаунты.
 Проверка этих случаев: `npm run test:reliability`.
+
+API helper contract tests run offline with a fake Axios adapter and never contact
+the external site: `npm run test:api`.
 
 Workflow [`.github/workflows/ci.yml`](./.github/workflows/ci.yml):
 

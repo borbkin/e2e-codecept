@@ -6,6 +6,7 @@
     "test:cleanup": "node --test tests/cleanup.test.cjs",
     "test:reliability": "node --test tests/reliability.test.cjs",
     "test:network": "node --test tests/network-isolation.test.cjs",
+    "test:api": "node --test --test-isolation=none tests/api-client.test.cjs",
     "test": "npm run test:ui",
     "test:ui": "cross-env HEADLESS=true npx codeceptjs run --plugins allure --steps",
     "test:headed": "cross-env HEADLESS=false npx codeceptjs run --plugins allure --steps",
