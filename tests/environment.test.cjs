@@ -27,7 +27,9 @@ test('BASE_URL is validated, normalized, and joined with a configured base path'
   assert.equal(buildURL('/', env), 'http://127.0.0.1:4000/shop/');
   assert.throws(() => loadEnvironment({ BASE_URL: 'not a url' }), /Invalid BASE_URL/);
   assert.throws(() => loadEnvironment({ BASE_URL: 'ftp://example.test' }), /Invalid BASE_URL/);
-  assert.throws(() => loadEnvironment({ BASE_URL: 'https://example.test/path?query=1' }), /Query strings/);
+  for (const suffix of ['?query=1', '?', '#', '#section']) {
+    assert.throws(() => loadEnvironment({ BASE_URL: `https://example.test/path${suffix}` }), /Query strings/);
+  }
   assert.throws(() => buildURL('https://other.test', env), /relative to BASE_URL/);
 });
 

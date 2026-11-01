@@ -60,7 +60,9 @@ export function normalizeBaseURL(value: string): string {
   if ((url.protocol !== 'http:' && url.protocol !== 'https:') || !url.hostname || url.username || url.password) {
     throw new Error(`Invalid BASE_URL "${value}". Expected an absolute http or https URL.`);
   }
-  if (url.search || url.hash) {
+  // URL.search/hash are empty for a bare '?' or '#', but those delimiters
+  // still break CodeceptJS relative-path concatenation.
+  if (url.href.includes('?') || url.href.includes('#')) {
     throw new Error(`Invalid BASE_URL "${value}". Query strings and fragments are not supported.`);
   }
 
